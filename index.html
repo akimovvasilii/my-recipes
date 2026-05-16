@@ -107,20 +107,62 @@
             margin-bottom: 24px;
         }
 
+        /* Обновленные стили для карточки категории */
         .category-item {
             background: var(--surface-color);
             border: 1px solid var(--border-color);
-            padding: 16px;
             border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             text-align: center;
             position: relative;
             cursor: pointer;
+            overflow: hidden;
+            min-height: 110px;
         }
-        .category-emoji { font-size: 2rem; margin-bottom: 8px; }
-        .category-title { font-weight: 500; font-size: 0.95rem; }
+        
+        /* Слой для фоновой картинки категории, если вставлена ссылка */
+        .category-bg-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        /* Затемнение картинки, чтобы текст читался */
+        .category-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+            display: none;
+        }
+        
+        .category-item.has-img .category-overlay {
+            display: block;
+        }
+
+        .category-emoji { 
+            font-size: 2rem; 
+            margin-bottom: 8px; 
+            z-index: 3;
+            position: relative;
+        }
+        
+        .category-title { 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            z-index: 3;
+            position: relative;
+            padding: 0 8px;
+        }
+        
+        .category-item.has-img .category-title {
+            color: #ffffff;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+        }
 
         .recipe-card {
             background: var(--surface-color);
@@ -138,7 +180,8 @@
             right: 4px;
             display: flex;
             gap: 4px;
-            opacity: 0.6;
+            opacity: 0.8;
+            z-index: 4;
         }
         .item-actions button { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 50%; width: 24px; height: 24px; font-size: 0.7rem; cursor: pointer; }
 
@@ -217,8 +260,8 @@
                 <input type="text" id="form-cat-name" class="form-control">
             </div>
             <div class="form-group">
-                <label id="lbl-cat-emoji">Эмодзи иконка</label>
-                <input type="text" id="form-cat-emoji" class="form-control" placeholder="📂">
+                <label id="lbl-cat-emoji">Иконка (Эмодзи ИЛИ ссылка на фото URL)</label>
+                <input type="text" id="form-cat-emoji" class="form-control" placeholder="📂 или https://...">
             </div>
             <div class="btn-group">
                 <button class="btn btn-secondary" onclick="navigateBack()">Отмена</button>
@@ -280,7 +323,7 @@
                 cancel: "Отмена",
                 save: "Сохранить",
                 catName: "Название категории",
-                catEmoji: "Эмодзи иконка",
+                catEmoji: "Иконка (Эмодзи или Ссылка URL)",
                 recName: "Название рецепта",
                 recParent: "Родительская категория",
                 recIngredients: "Ингредиенты (с новой строки)",
@@ -302,7 +345,7 @@
                 cancel: "Cancel",
                 save: "Save",
                 catName: "Category Name",
-                catEmoji: "Emoji Icon",
+                catEmoji: "Icon (Emoji or URL Link)",
                 recName: "Recipe Name",
                 recParent: "Category/Subcategory",
                 recIngredients: "Ingredients (newline separated)",
@@ -324,31 +367,10 @@
         let db = {
             categories: [
                 { id: "cat_1", parentId: "root", name: { ru: "Салаты", en: "Salads" }, emoji: "🥗" },
-                { id: "cat_1_1", parentId: "cat_1", name: { ru: "Тёплые салаты", en: "Warm Salads" }, emoji: "🔥" },
-                { id: "cat_1_1_1", parentId: "cat_1_1", name: { ru: "Азиатские", en: "Asian" }, emoji: "🥢" },
                 { id: "cat_2", parentId: "root", name: { ru: "Паста", en: "Pasta" }, emoji: "🍝" },
                 { id: "cat_3", parentId: "root", name: { ru: "Супы", en: "Soups" }, emoji: "🍲" }
             ],
-            recipes: [
-                {
-                    id: "rec_1",
-                    parentId: "cat_1_1_1",
-                    name: { ru: "Тёплый салат с курицей", en: "Warm Chicken Salad" },
-                    ingredients: { ru: "Куриное филе\nЛистья салата\nСоевый соус\nКунжут", en: "Chicken fillet\nSalad leaves\nSoy sauce\nSesame" },
-                    steps: { ru: "1. Обжарить курицу.\n2. Смешать с листьями.\n3. Заправить соусом.", en: "1. Fry chicken.\n2. Mix with leaves.\n3. Add sauce." },
-                    img1: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500",
-                    img2: ""
-                },
-                {
-                    id: "rec_2",
-                    parentId: "cat_2",
-                    name: { ru: "Карбонара", en: "Carbonara" },
-                    ingredients: { ru: "Спагетти\nБекон\nЖелток\nПармезан", en: "Spaghetti\nBacon\nEgg yolk\nParmesan" },
-                    steps: { ru: "1. Сварить пасту.\n2. Обжарить бекон.\n3. Смешать все вместе горячим.", en: "1. Cook pasta.\n2. Fry bacon.\n3. Mix everything while hot." },
-                    img1: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=500",
-                    img2: ""
-                }
-            ]
+            recipes: []
         };
 
         function loadData() {
@@ -368,8 +390,7 @@
                             localStorage.setItem('culinary_db', JSON.stringify(db));
                             renderCurrentLevel();
                         }
-                    }).catch(e => console.log("Работа офлайн или требуется войти в Google."));
-            }
+                    }).catch(e => console.log("Работа офлайн."));
         }
 
         function showAccessDeniedScreen(message) {
@@ -377,7 +398,6 @@
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 24px; text-align: center; background: #121212; color: #f5f5f5; font-family: Georgia, serif;">
                     <h2 style="margin-bottom: 16px; color: #ff4d4d;">🛑 Доступ ограничен</h2>
                     <p style="max-width: 400px; line-height: 1.6; margin-bottom: 24px; color: #a0a0a0;">${message}</p>
-                    <p style="font-size: 0.9rem; color: #767676;">Убедитесь, что вы авторизованы в браузере под тем Google-аккаунтом, который добавлен в белый список.</p>
                 </div>
             `;
         }
@@ -444,6 +464,7 @@
             });
         }
 
+        // Умная отрисовка: проверяет ссылка внутри emoji или значок
         function renderCurrentLevel() {
             renderBreadcrumbs();
             const catHeading = document.getElementById('category-heading');
@@ -451,22 +472,40 @@
                 catHeading.innerText = i18n[currentLang].mainPage;
             } else {
                 const currentCat = db.categories.find(c => c.id === currentCategoryId);
-                catHeading.innerText = (currentCat.emoji ? currentCat.emoji + " " : "") + (currentCat.name[currentLang] || currentCat.name['ru']);
+                const isUrl = currentCat.emoji && (currentCat.emoji.startsWith('http://') || currentCat.emoji.startsWith('https://'));
+                catHeading.innerText = (currentCat.emoji && !isUrl ? currentCat.emoji + " " : "") + (currentCat.name[currentLang] || currentCat.name['ru']);
             }
 
             const subCatsList = document.getElementById('subcategories-list');
             subCatsList.innerHTML = '';
             db.categories.filter(c => c.parentId === currentCategoryId).forEach(cat => {
                 const div = document.createElement('div');
-                div.className = 'category-item';
-                div.innerHTML = `
-                    <div class="category-emoji">${cat.emoji || '📂'}</div>
-                    <div class="category-title">${cat.name[currentLang] || cat.name['ru']}</div>
-                    <div class="item-actions">
-                        <button onclick="event.stopPropagation(); openEditCategory('${cat.id}')">✏️</button>
-                        <button onclick="event.stopPropagation(); deleteCategory('${cat.id}')">❌</button>
-                    </div>
-                `;
+                
+                const isUrl = cat.emoji && (cat.emoji.startsWith('http://') || cat.emoji.startsWith('https://'));
+                
+                if (isUrl) {
+                    div.className = 'category-item has-img';
+                    div.innerHTML = `
+                        <img src="${cat.emoji}" class="category-bg-img" alt="">
+                        <div class="category-overlay"></div>
+                        <div class="category-title">${cat.name[currentLang] || cat.name['ru']}</div>
+                        <div class="item-actions">
+                            <button onclick="event.stopPropagation(); openEditCategory('${cat.id}')">✏️</button>
+                            <button onclick="event.stopPropagation(); deleteCategory('${cat.id}')">❌</button>
+                        </div>
+                    `;
+                } else {
+                    div.className = 'category-item';
+                    div.innerHTML = `
+                        <div class="category-emoji">${cat.emoji || '📂'}</div>
+                        <div class="category-title">${cat.name[currentLang] || cat.name['ru']}</div>
+                        <div class="item-actions">
+                            <button onclick="event.stopPropagation(); openEditCategory('${cat.id}')">✏️</button>
+                            <button onclick="event.stopPropagation(); deleteCategory('${cat.id}')">❌</button>
+                        </div>
+                    `;
+                }
+                
                 div.onclick = () => navigateToCategory(cat.id);
                 subCatsList.appendChild(div);
             });
@@ -526,7 +565,7 @@
                 document.getElementById('form-cat-emoji').value = cat.emoji || '📂';
             } else {
                 document.getElementById('form-cat-name').value = '';
-                document.getElementById('form-cat-emoji').value = '📂';
+                document.getElementById('form-cat-emoji').value = '';
             }
             showView('view-form-category');
         }
@@ -534,7 +573,7 @@
         document.getElementById('btn-save-category').onclick = () => {
             const id = document.getElementById('form-cat-id').value;
             const nameText = document.getElementById('form-cat-name').value;
-            const emojiText = document.getElementById('form-cat-emoji').value;
+            const emojiText = document.getElementById('form-cat-emoji').value.trim();
             if(!nameText) return;
 
             if(id) {
@@ -571,7 +610,8 @@
             if(parentId === 'root') options += `<option value="root">${i18n[currentLang].mainPage}</option>`;
             db.categories.filter(c => c.parentId === parentId).forEach(c => {
                 const indent = '&nbsp;&nbsp;'.repeat(depth + 1);
-                options += `<option value="${c.id}">${indent}${c.emoji || '📂'} ${c.name[currentLang] || c.name['ru']}</option>`;
+                const isUrl = c.emoji && (c.emoji.startsWith('http://') || c.emoji.startsWith('https://'));
+                options += `<option value="${c.id}">${indent}${isUrl ? '🖼️' : (c.emoji || '📂')} ${c.name[currentLang] || c.name['ru']}</option>`;
                 options += buildTreeOptions(c.id, depth + 1);
             });
             return options;
