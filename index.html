@@ -299,7 +299,7 @@ const EMOJIS = ['🥗','🍝','🍲','🥘','🍜','🍛','🍣','🥩','🍗','
 const PROMPT = `Напиши рецепт строго в этом формате:\n\nНАЗВАНИЕ: [название блюда]\nПОРЦИИ: [число]\n\nИНГРЕДИЕНТЫ:\n- ингредиент 1 — количество\n- ингредиент 2 — количество\n\nШАГИ:\n1. Первый шаг\n2. Второй шаг`;
 
 let lang = localStorage.getItem('lang') || 'ru';
-let theme = localStorage.getItem('theme') || 'dark';
+let theme = localStorage.getItem('theme') || 'light';
 let currentId = 'root', navStack = ['root'];
 let allCats = [], allRecipes = [];
 let selectedEmoji = '📂', catPhotoFile = null, rec1File = null, rec2File = null;
@@ -339,18 +339,19 @@ document.getElementById('btn-srv-minus').onclick = () => { if (currentServings <
 document.getElementById('btn-srv-plus').onclick = () => { currentServings++; document.getElementById('srv-count').textContent = currentServings; renderIng(currentServings / baseServings); };
 
 // ── AUTH ──────────────────────────────────────────────────────
-await setPersistence(auth, browserLocalPersistence);
-onAuthStateChanged(auth, async user => {
-  if (user) { document.getElementById('login-screen').classList.add('hidden'); await loadAll(); navTo('root'); }
-  else { document.getElementById('login-screen').classList.remove('hidden'); }
+setPersistence(auth, browserLocalPersistence).then(() => {
+  onAuthStateChanged(auth, async user => {
+    if (user) { document.getElementById('login-screen').classList.add('hidden'); await loadAll(); navTo('root'); }
+    else { document.getElementById('login-screen').classList.remove('hidden'); }
+  });
 });
-document.getElementById('login-btn').onclick = async () => {
+
+document.getElementById('login-btn').onclick = () => {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-password').value;
   const errEl = document.getElementById('login-error');
   errEl.style.display = 'none';
-  try { await signInWithEmailAndPassword(auth, email, pass); }
-  catch(e) { errEl.style.display = 'block'; }
+  signInWithEmailAndPassword(auth, email, pass).catch(() => { errEl.style.display = 'block'; });
 };
 document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
 
