@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -13,188 +13,150 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0f0e0d; --surface: #1a1917; --surface2: #242220;
-  --text: #f0ede8; --text-muted: #8a8680; --accent: #c9a96e;
-  --accent2: #8b6f47; --border: #2e2c29; --danger: #c0392b;
-  --radius: 10px;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  --bg:#0f0e0d;--surface:#1a1917;--surface2:#242220;--text:#f0ede8;--text-muted:#8a8680;
+  --accent:#c9a96e;--accent2:#8b6f47;--border:#2e2c29;--danger:#c0392b;--radius:10px;
+  --font-serif:'Cormorant Garamond',Georgia,serif;--font-sans:'DM Sans',system-ui,sans-serif;
+  --transition:0.25s cubic-bezier(0.4,0,0.2,1);
 }
-[data-theme="light"] {
-  --bg: #faf8f5; --surface: #ffffff; --surface2: #f3f0eb;
-  --text: #1a1814; --text-muted: #7a7570; --accent: #8b5e2a;
-  --accent2: #c9a96e; --border: #e8e4de;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; }
-body { font-family: var(--font-sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; transition: background var(--transition), color var(--transition); }
+[data-theme="light"]{--bg:#faf8f5;--surface:#fff;--surface2:#f3f0eb;--text:#1a1814;--text-muted:#7a7570;--accent:#8b5e2a;--accent2:#c9a96e;--border:#e8e4de;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;transition:background var(--transition),color var(--transition);}
 
-/* LOGIN */
-#login-screen {
-  position: fixed; inset: 0; z-index: 999;
-  background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; padding: 32px;
-}
-#login-screen.hidden { display: none; }
-.login-brand { font-family: var(--font-serif); font-size: 2.4rem; font-weight: 300; font-style: italic; color: var(--accent); margin-bottom: 6px; }
-.login-sub { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 48px; letter-spacing: 0.1em; text-transform: uppercase; }
-.login-box { width: 100%; max-width: 320px; }
+#login-screen{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px;}
+#login-screen.hidden{display:none;}
+.login-brand{font-family:var(--font-serif);font-size:2.4rem;font-weight:300;font-style:italic;color:var(--accent);margin-bottom:6px;}
+.login-sub{font-size:0.75rem;color:var(--text-muted);margin-bottom:48px;letter-spacing:0.1em;text-transform:uppercase;}
+.login-box{width:100%;max-width:320px;}
+.login-error{color:#c0392b;font-size:0.85rem;margin-bottom:12px;display:none;}
 
-/* LAYOUT */
-#app { display: flex; flex-direction: column; height: 100vh; }
-header { flex-shrink: 0; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 16px; z-index: 100; }
-.top-bar { display: flex; align-items: center; justify-content: space-between; height: 52px; }
-.brand { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 300; font-style: italic; letter-spacing: 0.02em; color: var(--accent); }
-.top-actions { display: flex; gap: 4px; align-items: center; }
-.icon-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1rem; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background var(--transition), color var(--transition); }
-.icon-btn:hover { background: var(--surface2); color: var(--text); }
-.lang-btn { font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px; cursor: pointer; transition: all var(--transition); }
-.lang-btn:hover { border-color: var(--accent); color: var(--accent); }
-.search-bar { padding: 8px 0 10px; position: relative; }
-.search-bar input { width: 100%; padding: 9px 16px 9px 36px; background: var(--surface2); border: 1px solid var(--border); border-radius: 30px; color: var(--text); font-family: var(--font-sans); font-size: 0.9rem; outline: none; transition: border-color var(--transition); }
-.search-bar input:focus { border-color: var(--accent); }
-.search-bar input::placeholder { color: var(--text-muted); }
-.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; pointer-events: none; }
-.breadcrumbs { flex-shrink: 0; padding: 8px 16px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--surface); min-height: 36px; }
-.crumb { cursor: pointer; transition: color var(--transition); }
-.crumb:hover { color: var(--accent); }
-.crumb.active { color: var(--text); font-weight: 500; pointer-events: none; }
-.crumb-sep { opacity: 0.4; font-size: 0.7rem; }
-#main-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 16px 16px 80px; }
+#app{display:flex;flex-direction:column;height:100vh;}
+header{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px;z-index:100;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;height:52px;}
+.brand{font-family:var(--font-serif);font-size:1.5rem;font-weight:300;font-style:italic;color:var(--accent);}
+.top-actions{display:flex;gap:4px;align-items:center;}
+.icon-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1rem;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.lang-btn{font-size:0.75rem;font-weight:500;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:20px;padding:4px 10px;cursor:pointer;}
+.search-bar{padding:8px 0 10px;position:relative;}
+.search-bar input{width:100%;padding:9px 16px 9px 36px;background:var(--surface2);border:1px solid var(--border);border-radius:30px;color:var(--text);font-size:0.9rem;outline:none;}
+.search-bar input::placeholder{color:var(--text-muted);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:0.85rem;pointer-events:none;}
+.breadcrumbs{flex-shrink:0;padding:8px 16px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:0.8rem;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--surface);min-height:36px;}
+.crumb{cursor:pointer;}.crumb:hover{color:var(--accent);}
+.crumb.active{color:var(--text);font-weight:500;pointer-events:none;}
+.crumb-sep{opacity:0.4;font-size:0.7rem;}
+#main-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:16px 16px 80px;}
 
-/* VIEWS */
-.view { display: none; animation: fadeUp 0.3s ease; }
-.view.active { display: block; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.view{display:none;animation:fadeUp 0.3s ease;}.view.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-.level-title { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 300; margin-bottom: 16px; color: var(--text); }
-.section-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin: 20px 0 10px; font-weight: 500; }
+.level-title{font-family:var(--font-serif);font-size:1.8rem;font-weight:300;margin-bottom:16px;}
+.section-label{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin:20px 0 10px;font-weight:500;}
 
-.cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 8px; }
-.cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; position: relative; min-height: 90px; display: flex; flex-direction: column; justify-content: flex-end; transition: border-color var(--transition), transform var(--transition); }
-.cat-card:active { transform: scale(0.97); }
-.cat-card:hover { border-color: var(--accent2); }
-.cat-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.4s ease; }
-.cat-card:hover .cat-card-bg { transform: scale(1.03); }
-.cat-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%); }
-.cat-card-body { position: relative; z-index: 2; padding: 10px 10px 8px; display: flex; align-items: center; gap: 8px; }
-.cat-emoji { font-size: 1.4rem; flex-shrink: 0; }
-.cat-name { font-weight: 500; font-size: 0.9rem; line-height: 1.3; color: var(--text); }
-.cat-card[data-has-img="true"] .cat-name { color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
-.cat-count { font-size: 0.72rem; color: var(--text-muted); margin-top: 1px; }
-.cat-card[data-has-img="true"] .cat-count { color: rgba(255,255,255,0.7); }
-.cat-actions { position: absolute; top: 6px; right: 6px; z-index: 3; display: flex; gap: 4px; opacity: 0; transition: opacity var(--transition); }
-.cat-card:hover .cat-actions { opacity: 1; }
-.cat-actions button { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; }
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:8px;}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;position:relative;min-height:90px;display:flex;flex-direction:column;justify-content:flex-end;transition:transform var(--transition);}
+.cat-card:active{transform:scale(0.97);}
+.cat-card-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+.cat-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.1) 60%);}
+.cat-card-body{position:relative;z-index:2;padding:10px 10px 8px;display:flex;align-items:center;gap:8px;}
+.cat-emoji{font-size:1.4rem;flex-shrink:0;}
+.cat-name{font-weight:500;font-size:0.9rem;line-height:1.3;color:var(--text);}
+.cat-card[data-has-img="true"] .cat-name{color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.6);}
+.cat-count{font-size:0.72rem;color:var(--text-muted);}
+.cat-card[data-has-img="true"] .cat-count{color:rgba(255,255,255,0.7);}
+.cat-actions{position:absolute;top:6px;right:6px;z-index:3;display:flex;gap:4px;opacity:0;transition:opacity var(--transition);}
+.cat-card:hover .cat-actions{opacity:1;}
+.cat-actions button{background:rgba(0,0,0,0.5);border:none;border-radius:50%;width:26px;height:26px;font-size:0.7rem;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;}
 
-.recipe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.recipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color var(--transition), transform var(--transition); position: relative; }
-.recipe-card:active { transform: scale(0.97); }
-.recipe-card:hover { border-color: var(--accent2); }
-.recipe-card-img { width: 100%; height: 100px; object-fit: cover; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-muted); }
-.recipe-card-img img { width: 100%; height: 100%; object-fit: cover; }
-.recipe-card-title { padding: 8px 10px 10px; font-size: 0.88rem; font-weight: 400; line-height: 1.35; }
-.recipe-card-actions { position: absolute; top: 6px; right: 6px; z-index: 3; display: flex; gap: 4px; opacity: 0; transition: opacity var(--transition); }
-.recipe-card:hover .recipe-card-actions { opacity: 1; }
-.recipe-card-actions button { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 0.7rem; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; }
+.recipe-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.recipe-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;position:relative;transition:transform var(--transition);}
+.recipe-card:active{transform:scale(0.97);}
+.recipe-card-img{width:100%;height:100px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--text-muted);}
+.recipe-card-img img{width:100%;height:100%;object-fit:cover;}
+.recipe-card-title{padding:8px 10px 10px;font-size:0.88rem;line-height:1.35;}
+.recipe-card-actions{position:absolute;top:6px;right:6px;z-index:3;display:flex;gap:4px;opacity:0;transition:opacity var(--transition);}
+.recipe-card:hover .recipe-card-actions{opacity:1;}
+.recipe-card-actions button{background:rgba(0,0,0,0.5);border:none;border-radius:50%;width:26px;height:26px;font-size:0.7rem;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;}
 
-#view-recipe { padding-bottom: 20px; }
-.recipe-hero-wrap { margin: -16px -16px 20px; height: 240px; overflow: hidden; }
-.recipe-hero-wrap img { width: 100%; height: 100%; object-fit: cover; }
-.recipe-hero-placeholder { width: 100%; height: 100%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
-.recipe-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 300; line-height: 1.2; margin-bottom: 20px; }
-.recipe-section-title { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin: 24px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-.ing-list { list-style: none; }
-.ing-list li { padding: 8px 0 8px 12px; border-bottom: 1px solid var(--border); font-size: 0.93rem; }
-.steps-list { list-style: none; }
-.steps-list li { padding: 10px 0 10px 12px; border-bottom: 1px solid var(--border); font-size: 0.93rem; line-height: 1.6; }
-.recipe-footer-img { margin-top: 20px; border-radius: var(--radius); width: 100%; object-fit: cover; max-height: 220px; }
-.recipe-actions { display: flex; gap: 10px; margin-top: 24px; }
+#view-recipe{padding-bottom:20px;}
+.recipe-hero-wrap{margin:-16px -16px 20px;height:240px;overflow:hidden;}
+.recipe-hero-wrap img{width:100%;height:100%;object-fit:cover;}
+.recipe-hero-placeholder{width:100%;height:100%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:4rem;}
+.recipe-title{font-family:var(--font-serif);font-size:2rem;font-weight:300;line-height:1.2;margin-bottom:20px;}
+.recipe-section-title{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.ing-list{list-style:none;}
+.ing-list li{padding:8px 0 8px 12px;border-bottom:1px solid var(--border);font-size:0.93rem;}
+.steps-list{list-style:none;}
+.steps-list li{padding:10px 0 10px 12px;border-bottom:1px solid var(--border);font-size:0.93rem;line-height:1.6;}
+.recipe-footer-img{margin-top:20px;border-radius:var(--radius);width:100%;object-fit:cover;max-height:220px;}
+.recipe-actions{display:flex;gap:10px;margin-top:24px;}
 
-.form-title { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 300; margin-bottom: 20px; }
-.form-group { margin-bottom: 16px; }
-.form-label { display: block; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
-.form-control { width: 100%; padding: 11px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-sans); font-size: 0.95rem; outline: none; transition: border-color var(--transition); }
-.form-control:focus { border-color: var(--accent); }
-textarea.form-control { resize: vertical; min-height: 90px; line-height: 1.5; }
-select.form-control { appearance: none; cursor: pointer; }
+.servings-row{display:flex;align-items:center;gap:12px;margin:16px 0 8px;}
+.servings-label{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);font-weight:500;flex:1;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.servings-ctrl{display:flex;align-items:center;gap:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.servings-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.servings-count{font-family:var(--font-serif);font-size:1.2rem;min-width:24px;text-align:center;}
 
-.photo-upload-area { border: 2px dashed var(--border); border-radius: var(--radius); padding: 20px; text-align: center; cursor: pointer; transition: border-color var(--transition); position: relative; overflow: hidden; }
-.photo-upload-area:hover { border-color: var(--accent); }
-.photo-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-.photo-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: calc(var(--radius) - 2px); display: none; }
-.photo-upload-icon { font-size: 2rem; margin-bottom: 6px; }
-.photo-upload-text { font-size: 0.85rem; color: var(--text-muted); }
+.form-title{font-family:var(--font-serif);font-size:1.6rem;font-weight:300;margin-bottom:20px;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;font-weight:500;}
+.form-control{width:100%;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-sans);font-size:0.95rem;outline:none;transition:border-color var(--transition);}
+.form-control:focus{border-color:var(--accent);}
+textarea.form-control{resize:vertical;min-height:90px;line-height:1.5;}
+select.form-control{appearance:none;cursor:pointer;}
 
-.emoji-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 8px; }
-.emoji-btn { background: var(--surface2); border: 2px solid transparent; border-radius: 8px; padding: 6px; font-size: 1.3rem; cursor: pointer; text-align: center; transition: border-color var(--transition); }
-.emoji-btn.selected { border-color: var(--accent); }
+.photo-upload-area{border:2px dashed var(--border);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;position:relative;overflow:hidden;}
+.photo-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.photo-preview{width:100%;max-height:200px;object-fit:cover;border-radius:calc(var(--radius) - 2px);display:none;}
+.photo-upload-icon{font-size:2rem;margin-bottom:6px;}
+.photo-upload-text{font-size:0.85rem;color:var(--text-muted);}
 
-.btn { padding: 12px 20px; border: none; border-radius: var(--radius); font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; flex: 1; transition: all var(--transition); text-align: center; }
-.btn-primary { background: var(--accent); color: #0f0e0d; }
-.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-group { display: flex; gap: 10px; margin-top: 20px; }
+.emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px;}
+.emoji-btn{background:var(--surface2);border:2px solid transparent;border-radius:8px;padding:6px;font-size:1.3rem;cursor:pointer;text-align:center;}
+.emoji-btn.selected{border-color:var(--accent);}
 
-.fab-wrap { position: fixed; bottom: 20px; right: 16px; display: flex; flex-direction: column; gap: 10px; z-index: 50; }
-.fab { width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: transform var(--transition); }
-.fab:active { transform: scale(0.93); }
-.fab-primary { background: var(--accent); color: #0f0e0d; }
-.fab-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn{padding:12px 20px;border:none;border-radius:var(--radius);font-family:var(--font-sans);font-size:0.9rem;font-weight:500;cursor:pointer;flex:1;text-align:center;}
+.btn-primary{background:var(--accent);color:#0f0e0d;}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-group{display:flex;gap:10px;margin-top:20px;}
+.btn-paste{width:100%;margin-bottom:16px;background:var(--surface2);color:var(--text);border:1px solid var(--border);padding:11px;border-radius:var(--radius);font-size:0.9rem;cursor:pointer;}
 
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 20px; width: 100%; max-width: 480px; border-top: 1px solid var(--border); animation: slideUp 0.3s ease; }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal-title { font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 12px; }
-.modal-text { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+.fab-wrap{position:fixed;bottom:20px;right:16px;display:flex;flex-direction:column;gap:10px;z-index:50;}
+.fab{width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+.fab:active{transform:scale(0.93);}
+.fab-primary{background:var(--accent);color:#0f0e0d;}
+.fab-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
 
-.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 30px; font-size: 0.85rem; z-index: 300; opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; white-space: nowrap; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.search-path { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px;width:100%;max-width:480px;border-top:1px solid var(--border);animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.sheet-title{font-family:var(--font-serif);font-size:1.2rem;margin-bottom:12px;}
+.sheet-text{font-size:0.9rem;color:var(--text-muted);margin-bottom:20px;line-height:1.5;}
 
-/* PASTE MODAL */
-.paste-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
-.paste-modal-overlay.open { display: flex; }
-.paste-modal { background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 20px; width: 100%; max-width: 480px; border-top: 1px solid var(--border); animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
-.prompt-box { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; font-family: var(--font-sans); white-space: pre-wrap; }
-.btn-copy-prompt { background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 20px; padding: 6px 14px; font-size: 0.82rem; cursor: pointer; margin-bottom: 16px; }
-.btn-copy-prompt:active { background: var(--accent); color: #0f0e0d; }
-.servings-row { display: flex; align-items: center; gap: 12px; margin: 16px 0 8px; }
-.servings-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 500; flex: 1; }
-.servings-ctrl { display: flex; align-items: center; gap: 10px; }
-.servings-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color var(--transition); }
-.servings-btn:hover { border-color: var(--accent); }
-.servings-count { font-family: var(--font-serif); font-size: 1.3rem; min-width: 28px; text-align: center; }
+.prompt-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:0.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:8px;white-space:pre-wrap;}
+.btn-copy{background:none;border:1px solid var(--accent);color:var(--accent);border-radius:20px;padding:6px 14px;font-size:0.82rem;cursor:pointer;margin-bottom:16px;}
 
-.login-error { color: #c0392b; font-size: 0.85rem; margin-bottom: 12px; display: none; }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:30px;font-size:0.85rem;z-index:300;opacity:0;transition:opacity 0.3s,transform 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.search-path{font-size:0.75rem;color:var(--text-muted);margin-top:2px;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-brand">Journal.</div>
   <div class="login-sub">Culinary Journal</div>
   <div class="login-box">
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <input type="email" class="form-control" id="login-email" placeholder="your@email.com" autocomplete="email">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Пароль / Password</label>
-      <input type="password" class="form-control" id="login-password" placeholder="••••••••" autocomplete="current-password">
-    </div>
+    <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" id="login-email" placeholder="your@email.com" autocomplete="email"></div>
+    <div class="form-group"><label class="form-label">Пароль / Password</label><input type="password" class="form-control" id="login-password" placeholder="••••••••" autocomplete="current-password"></div>
     <div class="login-error" id="login-error">Неверный email или пароль</div>
     <button class="btn btn-primary" id="login-btn" style="width:100%">Войти / Sign in</button>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <header>
     <div class="top-bar">
@@ -221,7 +183,14 @@ select.form-control { appearance: none; cursor: pointer; }
     <div class="view" id="view-recipe">
       <div class="recipe-hero-wrap" id="rd-hero"></div>
       <div class="recipe-title" id="rd-title"></div>
-      <div class="servings-row"><span class="servings-label" id="rd-lbl-ing">Ингредиенты</span><div class="servings-ctrl"><button class="servings-btn" id="btn-srv-minus">−</button><span class="servings-count" id="srv-count">4</span><button class="servings-btn" id="btn-srv-plus">+</button></div></div>
+      <div class="servings-row">
+        <span class="servings-label" id="rd-lbl-ing">Ингредиенты</span>
+        <div class="servings-ctrl">
+          <button class="servings-btn" id="btn-srv-minus">−</button>
+          <span class="servings-count" id="srv-count">4</span>
+          <button class="servings-btn" id="btn-srv-plus">+</button>
+        </div>
+      </div>
       <ul class="ing-list" id="rd-ing"></ul>
       <div class="recipe-section-title" id="rd-lbl-steps">Шаги</div>
       <ol class="steps-list" id="rd-steps"></ol>
@@ -239,16 +208,9 @@ select.form-control { appearance: none; cursor: pointer; }
       <div class="form-group"><label class="form-label">Иконка</label><div class="emoji-grid" id="emoji-grid"></div></div>
       <div class="form-group">
         <label class="form-label">Обложка (необязательно)</label>
-        <div class="photo-upload-area">
-          <input type="file" accept="image/*" id="fcat-photo">
-          <img class="photo-preview" id="fcat-photo-preview">
-          <div id="cat-upload-placeholder"><div class="photo-upload-icon">📷</div><div class="photo-upload-text">Нажмите чтобы загрузить фото</div></div>
-        </div>
+        <div class="photo-upload-area"><input type="file" accept="image/*" id="fcat-photo"><img class="photo-preview" id="fcat-photo-preview"><div id="cat-ph"><div class="photo-upload-icon">📷</div><div class="photo-upload-text">Нажмите чтобы загрузить фото</div></div></div>
       </div>
-      <div class="btn-group">
-        <button class="btn btn-secondary" id="fcat-cancel">Отмена</button>
-        <button class="btn btn-primary" id="fcat-save">Сохранить</button>
-      </div>
+      <div class="btn-group"><button class="btn btn-secondary" id="fcat-cancel">Отмена</button><button class="btn btn-primary" id="fcat-save">Сохранить</button></div>
     </div>
 
     <div class="view" id="view-form-rec">
@@ -256,60 +218,44 @@ select.form-control { appearance: none; cursor: pointer; }
       <input type="hidden" id="frec-id">
       <div class="form-group"><label class="form-label">Название</label><input type="text" class="form-control" id="frec-name"></div>
       <div class="form-group"><label class="form-label">Категория</label><select class="form-control" id="frec-parent"></select></div>
-      <div class="form-group"><button class="btn btn-secondary" id="btn-paste-recipe" style="width:100%;margin-bottom:16px">📋 Вставить рецепт от AI</button></div><div class="form-group"><label class="form-label">Ингредиенты</label><textarea class="form-control" id="frec-ing" rows="5" placeholder="Каждый ингредиент с новой строки"></textarea></div>
+      <button class="btn-paste" id="btn-paste">📋 Вставить рецепт от AI</button>
+      <div class="form-group"><label class="form-label">Ингредиенты</label><textarea class="form-control" id="frec-ing" rows="5" placeholder="Каждый ингредиент с новой строки"></textarea></div>
       <div class="form-group"><label class="form-label">Шаги</label><textarea class="form-control" id="frec-steps" rows="6" placeholder="Каждый шаг с новой строки"></textarea></div>
       <div class="form-group">
         <label class="form-label">Главное фото</label>
-        <div class="photo-upload-area">
-          <input type="file" accept="image/*" id="frec-photo1">
-          <img class="photo-preview" id="frec-photo1-preview">
-          <div id="rec-upload-placeholder1"><div class="photo-upload-icon">📷</div><div class="photo-upload-text">Нажмите чтобы загрузить фото</div></div>
-        </div>
+        <div class="photo-upload-area"><input type="file" accept="image/*" id="frec-photo1"><img class="photo-preview" id="frec-p1-preview"><div id="rec-ph1"><div class="photo-upload-icon">📷</div><div class="photo-upload-text">Нажмите чтобы загрузить фото</div></div></div>
       </div>
       <div class="form-group">
         <label class="form-label">Дополнительное фото</label>
-        <div class="photo-upload-area">
-          <input type="file" accept="image/*" id="frec-photo2">
-          <img class="photo-preview" id="frec-photo2-preview">
-          <div id="rec-upload-placeholder2"><div class="photo-upload-icon">📷</div><div class="photo-upload-text">Нажмите чтобы загрузить фото</div></div>
-        </div>
+        <div class="photo-upload-area"><input type="file" accept="image/*" id="frec-photo2"><img class="photo-preview" id="frec-p2-preview"><div id="rec-ph2"><div class="photo-upload-icon">📷</div><div class="photo-upload-text">Нажмите чтобы загрузить фото</div></div></div>
       </div>
-      <div class="btn-group">
-        <button class="btn btn-secondary" id="frec-cancel">Отмена</button>
-        <button class="btn btn-primary" id="frec-save">Сохранить</button>
-      </div>
+      <div class="btn-group"><button class="btn btn-secondary" id="frec-cancel">Отмена</button><button class="btn btn-primary" id="frec-save">Сохранить</button></div>
     </div>
 
   </div>
-
   <div class="fab-wrap" id="fab-wrap">
     <button class="fab fab-secondary" id="fab-cat">📂</button>
     <button class="fab fab-primary" id="fab-rec">🍽</button>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <div class="modal-title" id="modal-title"></div>
-    <div class="modal-text" id="modal-text"></div>
-    <div class="btn-group">
-      <button class="btn btn-secondary" id="modal-cancel">Отмена</button>
-      <button class="btn btn-danger" id="modal-confirm">Удалить</button>
-    </div>
+<!-- DELETE MODAL -->
+<div class="overlay" id="del-overlay">
+  <div class="sheet">
+    <div class="sheet-title" id="del-title"></div>
+    <div class="sheet-text" id="del-text"></div>
+    <div class="btn-group"><button class="btn btn-secondary" id="del-cancel">Отмена</button><button class="btn btn-danger" id="del-confirm">Удалить</button></div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <!-- PASTE MODAL -->
-<div class="paste-modal-overlay" id="paste-modal-overlay">
-  <div class="paste-modal">
-    <div class="modal-title" style="margin-bottom:12px">📋 Вставить рецепт от AI</div>
+<div class="overlay" id="paste-overlay">
+  <div class="sheet">
+    <div class="sheet-title">📋 Вставить рецепт от AI</div>
     <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px">Используй этот промт для любого AI:</div>
-    <div class="prompt-box" id="prompt-box">Напиши рецепт строго в этом формате:
+    <div class="prompt-box">Напиши рецепт строго в этом формате:
 
 НАЗВАНИЕ: [название блюда]
-
 ПОРЦИИ: [число]
 
 ИНГРЕДИЕНТЫ:
@@ -319,17 +265,13 @@ select.form-control { appearance: none; cursor: pointer; }
 ШАГИ:
 1. Первый шаг
 2. Второй шаг</div>
-    <button class="btn-copy-prompt" id="btn-copy-prompt">📋 Копировать промт</button>
-    <div class="form-group">
-      <label class="form-label">Вставь готовый рецепт сюда</label>
-      <textarea class="form-control" id="paste-text" rows="8" placeholder="Вставь текст рецепта от AI..."></textarea>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-secondary" id="paste-cancel">Отмена</button>
-      <button class="btn btn-primary" id="paste-parse">Заполнить →</button>
-    </div>
+    <button class="btn-copy" id="btn-copy-prompt">📋 Копировать промт</button>
+    <div class="form-group"><label class="form-label">Вставь готовый рецепт сюда</label><textarea class="form-control" id="paste-text" rows="8" placeholder="Вставь текст рецепта от AI..."></textarea></div>
+    <div class="btn-group"><button class="btn btn-secondary" id="paste-cancel">Отмена</button><button class="btn btn-primary" id="paste-go">Заполнить →</button></div>
   </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -337,74 +279,86 @@ import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc } from "https
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAFQkToV3Vd87y9EJSh9eY4f4D6XFDWII4",
-  authDomain: "my-recipes-e8284.firebaseapp.com",
-  projectId: "my-recipes-e8284",
-  storageBucket: "my-recipes-e8284.firebasestorage.app",
-  messagingSenderId: "965569820194",
-  appId: "1:965569820194:web:162f1045ee2b0e2c373c7b"
-};
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db  = getFirestore(firebaseApp);
-const storage = getStorage(firebaseApp);
-const auth = getAuth(firebaseApp);
+const fbApp = initializeApp({
+  apiKey:"AIzaSyAFQkToV3Vd87y9EJSh9eY4f4D6XFDWII4",
+  authDomain:"my-recipes-e8284.firebaseapp.com",
+  projectId:"my-recipes-e8284",
+  storageBucket:"my-recipes-e8284.firebasestorage.app",
+  messagingSenderId:"965569820194",
+  appId:"1:965569820194:web:162f1045ee2b0e2c373c7b"
+});
+const db = getFirestore(fbApp);
+const storage = getStorage(fbApp);
+const auth = getAuth(fbApp);
 
 const T = {
-  ru: { home:"Главная", search:"Поиск рецептов...", searchResults:"Результаты", categories:"Категории", recipes:"Рецепты", ingredients:"Ингредиенты", steps:"Шаги приготовления", edit:"Редактировать", delete:"Удалить", cancel:"Отмена", save:"Сохранить", newCategory:"Новая категория", editCategory:"Редактировать категорию", newRecipe:"Новый рецепт", editRecipe:"Редактировать рецепт", confirmDeleteCat:"Удалить эту категорию?", confirmDeleteRec:"Удалить этот рецепт?", warnHasChildren:"Внутри есть подкатегории или рецепты. Всё будет удалено.", saving:"Сохранение...", saved:"Сохранено ✓", deleted:"Удалено", noRecipes:"Рецептов пока нет", noResults:"Ничего не найдено" },
-  en: { home:"Home", search:"Search recipes...", searchResults:"Results", categories:"Categories", recipes:"Recipes", ingredients:"Ingredients", steps:"Steps", edit:"Edit", delete:"Delete", cancel:"Cancel", save:"Save", newCategory:"New category", editCategory:"Edit category", newRecipe:"New recipe", editRecipe:"Edit recipe", confirmDeleteCat:"Delete this category?", confirmDeleteRec:"Delete this recipe?", warnHasChildren:"Contains subcategories or recipes. All will be deleted.", saving:"Saving...", saved:"Saved ✓", deleted:"Deleted", noRecipes:"No recipes yet", noResults:"Nothing found" }
+  ru:{home:"Главная",search:"Поиск рецептов...",searchResults:"Результаты",categories:"Категории",recipes:"Рецепты",ingredients:"Ингредиенты",steps:"Шаги",edit:"Редактировать",delete:"Удалить",cancel:"Отмена",save:"Сохранить",newCat:"Новая категория",editCat:"Редактировать категорию",newRec:"Новый рецепт",editRec:"Редактировать рецепт",confirmDelCat:"Удалить эту категорию?",confirmDelRec:"Удалить этот рецепт?",warnChildren:"Внутри есть подкатегории или рецепты. Всё будет удалено.",saving:"Сохранение...",saved:"Сохранено ✓",deleted:"Удалено",noRecipes:"Рецептов пока нет",noResults:"Ничего не найдено",servings:"порц."},
+  en:{home:"Home",search:"Search recipes...",searchResults:"Results",categories:"Categories",recipes:"Recipes",ingredients:"Ingredients",steps:"Steps",edit:"Edit",delete:"Delete",cancel:"Cancel",save:"Save",newCat:"New category",editCat:"Edit category",newRec:"New recipe",editRec:"Edit recipe",confirmDelCat:"Delete this category?",confirmDelRec:"Delete this recipe?",warnChildren:"Contains subcategories or recipes. All will be deleted.",saving:"Saving...",saved:"Saved ✓",deleted:"Deleted",noRecipes:"No recipes yet",noResults:"Nothing found",servings:"serv."}
 };
-
 const EMOJIS = ['🥗','🍝','🍲','🥘','🍜','🍛','🍣','🥩','🍗','🥚','🥞','🥖','🍰','🎂','🍪','🧁','🍫','🍷','🍹','🫕','🫔','🌮','🥙','🥪','🧆','🌿','🧄','🫚','🍳','🥣','🫖','☕','📂'];
+const PROMPT = `Напиши рецепт строго в этом формате:\n\nНАЗВАНИЕ: [название блюда]\nПОРЦИИ: [число]\n\nИНГРЕДИЕНТЫ:\n- ингредиент 1 — количество\n- ингредиент 2 — количество\n\nШАГИ:\n1. Первый шаг\n2. Второй шаг`;
 
 let lang = localStorage.getItem('lang') || 'ru';
 let theme = localStorage.getItem('theme') || 'dark';
-let currentId = 'root';
-let navStack = ['root'];
+let currentId = 'root', navStack = ['root'];
 let allCats = [], allRecipes = [];
-let selectedEmoji = '📂';
-let catPhotoFile = null, rec1File = null, rec2File = null;
+let selectedEmoji = '📂', catPhotoFile = null, rec1File = null, rec2File = null;
+let baseServings = 4, currentServings = 4, baseIngredients = [];
+let wakeLock = null;
 
 document.documentElement.setAttribute('data-theme', theme);
 document.getElementById('btn-lang').textContent = lang === 'ru' ? 'EN' : 'RU';
 
+// ── WAKE LOCK ─────────────────────────────────────────────────
+async function reqWakeLock() {
+  if ('wakeLock' in navigator) { try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e){} }
+}
+function relWakeLock() { if (wakeLock) { wakeLock.release(); wakeLock = null; } }
+document.addEventListener('visibilitychange', async () => { if (wakeLock && document.visibilityState === 'visible') await reqWakeLock(); });
+
+// ── SERVINGS ──────────────────────────────────────────────────
+function parseIng(text) {
+  return text.split('\n').filter(Boolean).map(line => {
+    const m = line.match(/(\d+[.,]?\d*)/);
+    return { line, num: m ? parseFloat(m[1].replace(',','.')) : null };
+  });
+}
+function renderIng(mult) {
+  const el = document.getElementById('rd-ing'); el.innerHTML = '';
+  baseIngredients.forEach(item => {
+    const li = document.createElement('li');
+    if (item.num && mult !== 1) {
+      const n = item.num * mult;
+      const r = Number.isInteger(n) ? n : Math.round(n * 10) / 10;
+      li.textContent = item.line.replace(/(\d+[.,]?\d*)/, r);
+    } else { li.textContent = item.line; }
+    el.appendChild(li);
+  });
+}
+document.getElementById('btn-srv-minus').onclick = () => { if (currentServings <= 1) return; currentServings--; document.getElementById('srv-count').textContent = currentServings; renderIng(currentServings / baseServings); };
+document.getElementById('btn-srv-plus').onclick = () => { currentServings++; document.getElementById('srv-count').textContent = currentServings; renderIng(currentServings / baseServings); };
+
 // ── AUTH ──────────────────────────────────────────────────────
 await setPersistence(auth, browserLocalPersistence);
-
 onAuthStateChanged(auth, async user => {
-  if (user) {
-    document.getElementById('login-screen').classList.add('hidden');
-    await loadAll();
-    navTo('root');
-  } else {
-    document.getElementById('login-screen').classList.remove('hidden');
-  }
+  if (user) { document.getElementById('login-screen').classList.add('hidden'); await loadAll(); navTo('root'); }
+  else { document.getElementById('login-screen').classList.remove('hidden'); }
 });
-
 document.getElementById('login-btn').onclick = async () => {
   const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-password').value;
+  const pass = document.getElementById('login-password').value;
   const errEl = document.getElementById('login-error');
   errEl.style.display = 'none';
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-  } catch(e) {
-    errEl.style.display = 'block';
-  }
+  try { await signInWithEmailAndPassword(auth, email, pass); }
+  catch(e) { errEl.style.display = 'block'; }
 };
-document.getElementById('login-password').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('login-btn').click();
-});
+document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
 
 // ── DATA ──────────────────────────────────────────────────────
 async function loadAll() {
-  const [cSnap, rSnap] = await Promise.all([
-    getDocs(collection(db, 'categories')),
-    getDocs(collection(db, 'recipes'))
-  ]);
-  allCats    = cSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  allRecipes = rSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const [cs, rs] = await Promise.all([getDocs(collection(db,'categories')), getDocs(collection(db,'recipes'))]);
+  allCats = cs.docs.map(d => ({id:d.id,...d.data()}));
+  allRecipes = rs.docs.map(d => ({id:d.id,...d.data()}));
 }
 
 // ── RENDER ────────────────────────────────────────────────────
@@ -412,63 +366,43 @@ function renderLevel() {
   renderBreadcrumbs();
   const cur = allCats.find(c => c.id === currentId);
   document.getElementById('level-title').textContent = currentId === 'root' ? T[lang].home : (cur?.name?.[lang] || cur?.name?.ru || '');
-
   const cats = allCats.filter(c => c.parentId === currentId);
-  const catSec = document.getElementById('cats-section');
-  catSec.innerHTML = '';
+  const catSec = document.getElementById('cats-section'); catSec.innerHTML = '';
   if (cats.length) {
     const lbl = document.createElement('div'); lbl.className = 'section-label'; lbl.textContent = T[lang].categories; catSec.appendChild(lbl);
     const grid = document.createElement('div'); grid.className = 'cat-grid';
     cats.forEach(c => grid.appendChild(makeCatCard(c))); catSec.appendChild(grid);
   }
-
   const recs = allRecipes.filter(r => r.parentId === currentId);
-  const recSec = document.getElementById('recipes-section');
-  recSec.innerHTML = '';
+  const recSec = document.getElementById('recipes-section'); recSec.innerHTML = '';
   if (recs.length) {
     const lbl = document.createElement('div'); lbl.className = 'section-label'; lbl.textContent = T[lang].recipes; recSec.appendChild(lbl);
     const grid = document.createElement('div'); grid.className = 'recipe-grid';
     recs.forEach(r => grid.appendChild(makeRecipeCard(r))); recSec.appendChild(grid);
   }
-  if (!cats.length && !recs.length) {
-    recSec.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:3rem;margin-bottom:12px">🍽</div><div>${T[lang].noRecipes}</div></div>`;
-  }
-  showView('view-browse');
-  document.getElementById('fab-wrap').style.display = 'flex';
+  if (!cats.length && !recs.length) recSec.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:3rem;margin-bottom:12px">🍽</div><div>${T[lang].noRecipes}</div></div>`;
+  showView('view-browse'); document.getElementById('fab-wrap').style.display = 'flex';
 }
 
 function makeCatCard(c) {
   const div = document.createElement('div'); div.className = 'cat-card';
   if (c.photoURL) { div.setAttribute('data-has-img','true'); div.innerHTML += `<div class="cat-card-bg" style="background-image:url('${c.photoURL}')"></div><div class="cat-card-overlay"></div>`; }
-  const childCount = allCats.filter(x=>x.parentId===c.id).length + allRecipes.filter(x=>x.parentId===c.id).length;
-  div.innerHTML += `<div class="cat-card-body"><span class="cat-emoji">${c.emoji||'📂'}</span><div><div class="cat-name">${c.name?.[lang]||c.name?.ru||''}</div><div class="cat-count">${childCount} ${lang==='ru'?'элем.':'items'}</div></div></div><div class="cat-actions"><button onclick="event.stopPropagation();openEditCat('${c.id}')">✏️</button><button onclick="event.stopPropagation();confirmDeleteCat('${c.id}')">🗑</button></div>`;
+  const n = allCats.filter(x=>x.parentId===c.id).length + allRecipes.filter(x=>x.parentId===c.id).length;
+  div.innerHTML += `<div class="cat-card-body"><span class="cat-emoji">${c.emoji||'📂'}</span><div><div class="cat-name">${c.name?.[lang]||c.name?.ru||''}</div><div class="cat-count">${n} ${lang==='ru'?'элем.':'items'}</div></div></div><div class="cat-actions"><button onclick="event.stopPropagation();openEditCat('${c.id}')">✏️</button><button onclick="event.stopPropagation();confirmDelCat('${c.id}')">🗑</button></div>`;
   div.onclick = () => navTo(c.id); return div;
 }
-
 function makeRecipeCard(r) {
   const div = document.createElement('div'); div.className = 'recipe-card';
-  div.innerHTML = `${r.img1?`<div class="recipe-card-img"><img src="${r.img1}" loading="lazy"></div>`:`<div class="recipe-card-img">🍽</div>`}<div class="recipe-card-title">${r.name?.[lang]||r.name?.ru||''}</div><div class="recipe-card-actions"><button onclick="event.stopPropagation();openEditRec('${r.id}')">✏️</button><button onclick="event.stopPropagation();confirmDeleteRec('${r.id}')">🗑</button></div>`;
+  div.innerHTML = `${r.img1?`<div class="recipe-card-img"><img src="${r.img1}" loading="lazy"></div>`:`<div class="recipe-card-img">🍽</div>`}<div class="recipe-card-title">${r.name?.[lang]||r.name?.ru||''}</div><div class="recipe-card-actions"><button onclick="event.stopPropagation();openEditRec('${r.id}')">✏️</button><button onclick="event.stopPropagation();confirmDelRec('${r.id}')">🗑</button></div>`;
   div.onclick = () => openRecipe(r.id); return div;
 }
-
-function navTo(id) {
-  currentId = id;
-  if (navStack[navStack.length-1] !== id) navStack.push(id);
-  renderLevel();
-  document.getElementById('main-scroll').scrollTop = 0;
-}
-
+function navTo(id) { currentId=id; if(navStack[navStack.length-1]!==id) navStack.push(id); renderLevel(); document.getElementById('main-scroll').scrollTop=0; }
 function renderBreadcrumbs() {
   const bc = document.getElementById('breadcrumbs'); bc.innerHTML = '';
-  const chain = []; let cur = allCats.find(c => c.id === currentId);
-  while (cur) { chain.unshift(cur); cur = allCats.find(c => c.id === cur.parentId); }
-  const root = document.createElement('span'); root.className = 'crumb' + (currentId==='root'?' active':''); root.textContent = T[lang].home;
-  root.onclick = () => { navStack=['root']; navTo('root'); }; bc.appendChild(root);
-  chain.forEach((c, i) => {
-    const sep = document.createElement('span'); sep.className='crumb-sep'; sep.textContent='›'; bc.appendChild(sep);
-    const sp = document.createElement('span'); sp.className = 'crumb' + (i===chain.length-1?' active':''); sp.textContent = c.name?.[lang]||c.name?.ru||'';
-    sp.onclick = () => { navStack = navStack.slice(0, navStack.indexOf(c.id)+1); navTo(c.id); }; bc.appendChild(sp);
-  });
+  const chain = []; let cur = allCats.find(c=>c.id===currentId);
+  while(cur){chain.unshift(cur);cur=allCats.find(c=>c.id===cur.parentId);}
+  const root = document.createElement('span'); root.className='crumb'+(currentId==='root'?' active':''); root.textContent=T[lang].home; root.onclick=()=>{navStack=['root'];navTo('root');}; bc.appendChild(root);
+  chain.forEach((c,i)=>{ const sep=document.createElement('span');sep.className='crumb-sep';sep.textContent='›';bc.appendChild(sep); const sp=document.createElement('span');sp.className='crumb'+(i===chain.length-1?' active':'');sp.textContent=c.name?.[lang]||c.name?.ru||'';sp.onclick=()=>{navStack=navStack.slice(0,navStack.indexOf(c.id)+1);navTo(c.id);};bc.appendChild(sp); });
 }
 
 // ── RECIPE DETAIL ─────────────────────────────────────────────
@@ -476,317 +410,140 @@ function openRecipe(id) {
   const r = allRecipes.find(x=>x.id===id); if(!r) return;
   document.getElementById('rd-hero').innerHTML = r.img1 ? `<img src="${r.img1}" alt="">` : `<div class="recipe-hero-placeholder">🍽</div>`;
   document.getElementById('rd-title').textContent = r.name?.[lang]||r.name?.ru||'';
+  document.getElementById('rd-lbl-ing').textContent = T[lang].ingredients;
   document.getElementById('rd-lbl-steps').textContent = T[lang].steps;
-  // Setup servings
   baseServings = r.servings || 4; currentServings = baseServings;
   document.getElementById('srv-count').textContent = currentServings;
-  baseIngredients = parseIngredients(r.ingredients?.[lang]||r.ingredients?.ru||'');
-  renderIngredients(1);
-  requestWakeLock();
+  baseIngredients = parseIng(r.ingredients?.[lang]||r.ingredients?.ru||'');
+  renderIng(1);
   const stepsEl = document.getElementById('rd-steps'); stepsEl.innerHTML = '';
-  (r.steps?.[lang]||r.steps?.ru||'').split('\n').filter(Boolean).forEach(line=>{ const li=document.createElement('li'); li.textContent=line; stepsEl.appendChild(li); });
+  (r.steps?.[lang]||r.steps?.ru||'').split('\n').filter(Boolean).forEach(line=>{ const li=document.createElement('li');li.textContent=line;stepsEl.appendChild(li); });
   const footer = document.getElementById('rd-footer-img');
-  footer.src = r.img2||''; footer.style.display = r.img2?'block':'none';
+  footer.src=r.img2||''; footer.style.display=r.img2?'block':'none';
   document.getElementById('btn-edit-rec').onclick = () => openEditRec(id);
-  document.getElementById('btn-delete-rec').onclick = () => confirmDeleteRec(id);
-  showView('view-recipe'); document.getElementById('fab-wrap').style.display = 'none';
-  document.getElementById('main-scroll').scrollTop = 0;
+  document.getElementById('btn-delete-rec').onclick = () => confirmDelRec(id);
+  reqWakeLock();
+  showView('view-recipe'); document.getElementById('fab-wrap').style.display='none';
+  document.getElementById('main-scroll').scrollTop=0;
 }
 
 // ── CATEGORY FORM ─────────────────────────────────────────────
 function buildEmojiGrid(sel) {
-  const grid = document.getElementById('emoji-grid'); grid.innerHTML = '';
-  EMOJIS.forEach(e => { const btn=document.createElement('button'); btn.className='emoji-btn'+(e===sel?' selected':''); btn.textContent=e; btn.onclick=()=>{ selectedEmoji=e; buildEmojiGrid(e); }; grid.appendChild(btn); });
+  const g=document.getElementById('emoji-grid');g.innerHTML='';
+  EMOJIS.forEach(e=>{const b=document.createElement('button');b.className='emoji-btn'+(e===sel?' selected':'');b.textContent=e;b.onclick=()=>{selectedEmoji=e;buildEmojiGrid(e);};g.appendChild(b);});
 }
-
-function openNewCat() {
-  document.getElementById('fcat-id').value=''; document.getElementById('fcat-name').value='';
-  selectedEmoji='📂'; buildEmojiGrid(selectedEmoji);
-  resetPhoto('fcat-photo','fcat-photo-preview','cat-upload-placeholder'); catPhotoFile=null;
-  document.getElementById('form-cat-title').textContent=T[lang].newCategory;
-  showView('view-form-cat'); document.getElementById('fab-wrap').style.display='none';
-}
-
+function openNewCat() { document.getElementById('fcat-id').value='';document.getElementById('fcat-name').value='';selectedEmoji='📂';buildEmojiGrid(selectedEmoji);resetPhoto('fcat-photo','fcat-photo-preview','cat-ph');catPhotoFile=null;document.getElementById('form-cat-title').textContent=T[lang].newCat;showView('view-form-cat');document.getElementById('fab-wrap').style.display='none'; }
 function openEditCat(id) {
-  const c=allCats.find(x=>x.id===id); if(!c) return;
-  document.getElementById('fcat-id').value=id; document.getElementById('fcat-name').value=c.name?.[lang]||c.name?.ru||'';
-  selectedEmoji=c.emoji||'📂'; buildEmojiGrid(selectedEmoji);
-  if(c.photoURL){ document.getElementById('fcat-photo-preview').src=c.photoURL; document.getElementById('fcat-photo-preview').style.display='block'; document.getElementById('cat-upload-placeholder').style.display='none'; }
-  else resetPhoto('fcat-photo','fcat-photo-preview','cat-upload-placeholder');
-  catPhotoFile=null; document.getElementById('form-cat-title').textContent=T[lang].editCategory;
-  showView('view-form-cat'); document.getElementById('fab-wrap').style.display='none';
+  const c=allCats.find(x=>x.id===id);if(!c)return;
+  document.getElementById('fcat-id').value=id;document.getElementById('fcat-name').value=c.name?.[lang]||c.name?.ru||'';
+  selectedEmoji=c.emoji||'📂';buildEmojiGrid(selectedEmoji);
+  if(c.photoURL){document.getElementById('fcat-photo-preview').src=c.photoURL;document.getElementById('fcat-photo-preview').style.display='block';document.getElementById('cat-ph').style.display='none';}
+  else resetPhoto('fcat-photo','fcat-photo-preview','cat-ph');
+  catPhotoFile=null;document.getElementById('form-cat-title').textContent=T[lang].editCat;showView('view-form-cat');document.getElementById('fab-wrap').style.display='none';
 }
-
-document.getElementById('fcat-photo').onchange = e => { const f=e.target.files[0]; if(!f) return; catPhotoFile=f; previewPhoto(f,'fcat-photo-preview','cat-upload-placeholder'); };
-document.getElementById('fcat-save').onclick = async () => {
-  const name=document.getElementById('fcat-name').value.trim(); if(!name) return;
-  const id=document.getElementById('fcat-id').value||'cat_'+Date.now();
-  showToast(T[lang].saving);
+document.getElementById('fcat-photo').onchange=e=>{const f=e.target.files[0];if(!f)return;catPhotoFile=f;prevPhoto(f,'fcat-photo-preview','cat-ph');};
+document.getElementById('fcat-save').onclick=async()=>{
+  const name=document.getElementById('fcat-name').value.trim();if(!name)return;
+  const id=document.getElementById('fcat-id').value||'cat_'+Date.now();showToast(T[lang].saving);
   let photoURL=allCats.find(c=>c.id===id)?.photoURL||'';
-  if(catPhotoFile){ const r=ref(storage,`categories/${id}_${Date.now()}`); await uploadBytes(r,catPhotoFile); photoURL=await getDownloadURL(r); }
-  const existing=allCats.find(c=>c.id===id);
-  const data={ parentId:existing?.parentId||currentId, name:{...(existing?.name||{}),[lang]:name}, emoji:selectedEmoji, photoURL, updatedAt:Date.now() };
-  if(!existing) data.createdAt=Date.now();
-  await setDoc(doc(db,'categories',id),data,{merge:true});
-  await loadAll(); showToast(T[lang].saved); navTo(data.parentId);
+  if(catPhotoFile){const r=ref(storage,`categories/${id}_${Date.now()}`);await uploadBytes(r,catPhotoFile);photoURL=await getDownloadURL(r);}
+  const ex=allCats.find(c=>c.id===id);
+  const data={parentId:ex?.parentId||currentId,name:{...(ex?.name||{}),[lang]:name},emoji:selectedEmoji,photoURL,updatedAt:Date.now()};
+  if(!ex)data.createdAt=Date.now();
+  await setDoc(doc(db,'categories',id),data,{merge:true});await loadAll();showToast(T[lang].saved);navTo(data.parentId);
 };
-document.getElementById('fcat-cancel').onclick = () => navTo(currentId);
+document.getElementById('fcat-cancel').onclick=()=>navTo(currentId);
 
 // ── RECIPE FORM ───────────────────────────────────────────────
-function buildParentSelect(selId) {
-  const sel=document.getElementById('frec-parent'); sel.innerHTML=`<option value="root">${T[lang].home}</option>`;
-  function add(pid,depth){ allCats.filter(c=>c.parentId===pid).forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent='\u00a0'.repeat(depth*3)+(c.emoji||'📂')+' '+(c.name?.[lang]||c.name?.ru||''); if(c.id===selId) o.selected=true; sel.appendChild(o); add(c.id,depth+1); }); }
-  add('root',0); if(selId) sel.value=selId;
+function buildParentSel(selId) {
+  const sel=document.getElementById('frec-parent');sel.innerHTML=`<option value="root">${T[lang].home}</option>`;
+  function add(pid,d){allCats.filter(c=>c.parentId===pid).forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent='\u00a0'.repeat(d*3)+(c.emoji||'📂')+' '+(c.name?.[lang]||c.name?.ru||'');if(c.id===selId)o.selected=true;sel.appendChild(o);add(c.id,d+1);});}
+  add('root',0);if(selId)sel.value=selId;
 }
-
-function openNewRec() {
-  document.getElementById('frec-id').value=''; document.getElementById('frec-name').value='';
-  document.getElementById('frec-ing').value=''; document.getElementById('frec-steps').value='';
-  buildParentSelect(currentId);
-  resetPhoto('frec-photo1','frec-photo1-preview','rec-upload-placeholder1');
-  resetPhoto('frec-photo2','frec-photo2-preview','rec-upload-placeholder2');
-  rec1File=null; rec2File=null; document.getElementById('form-rec-title').textContent=T[lang].newRecipe;
-  showView('view-form-rec'); document.getElementById('fab-wrap').style.display='none';
-}
-
+function openNewRec() { document.getElementById('frec-id').value='';document.getElementById('frec-name').value='';document.getElementById('frec-ing').value='';document.getElementById('frec-steps').value='';buildParentSel(currentId);resetPhoto('frec-photo1','frec-p1-preview','rec-ph1');resetPhoto('frec-photo2','frec-p2-preview','rec-ph2');rec1File=null;rec2File=null;document.getElementById('form-rec-title').textContent=T[lang].newRec;showView('view-form-rec');document.getElementById('fab-wrap').style.display='none'; }
 function openEditRec(id) {
-  const r=allRecipes.find(x=>x.id===id); if(!r) return;
-  document.getElementById('frec-id').value=id; document.getElementById('frec-name').value=r.name?.[lang]||r.name?.ru||'';
+  const r=allRecipes.find(x=>x.id===id);if(!r)return;
+  document.getElementById('frec-id').value=id;document.getElementById('frec-name').value=r.name?.[lang]||r.name?.ru||'';
   document.getElementById('frec-ing').value=r.ingredients?.[lang]||r.ingredients?.ru||'';
   document.getElementById('frec-steps').value=r.steps?.[lang]||r.steps?.ru||'';
-  buildParentSelect(r.parentId);
-  if(r.img1){ document.getElementById('frec-photo1-preview').src=r.img1; document.getElementById('frec-photo1-preview').style.display='block'; document.getElementById('rec-upload-placeholder1').style.display='none'; } else resetPhoto('frec-photo1','frec-photo1-preview','rec-upload-placeholder1');
-  if(r.img2){ document.getElementById('frec-photo2-preview').src=r.img2; document.getElementById('frec-photo2-preview').style.display='block'; document.getElementById('rec-upload-placeholder2').style.display='none'; } else resetPhoto('frec-photo2','frec-photo2-preview','rec-upload-placeholder2');
-  rec1File=null; rec2File=null; document.getElementById('form-rec-title').textContent=T[lang].editRecipe;
-  showView('view-form-rec'); document.getElementById('fab-wrap').style.display='none';
+  buildParentSel(r.parentId);
+  if(r.img1){document.getElementById('frec-p1-preview').src=r.img1;document.getElementById('frec-p1-preview').style.display='block';document.getElementById('rec-ph1').style.display='none';}else resetPhoto('frec-photo1','frec-p1-preview','rec-ph1');
+  if(r.img2){document.getElementById('frec-p2-preview').src=r.img2;document.getElementById('frec-p2-preview').style.display='block';document.getElementById('rec-ph2').style.display='none';}else resetPhoto('frec-photo2','frec-p2-preview','rec-ph2');
+  rec1File=null;rec2File=null;document.getElementById('form-rec-title').textContent=T[lang].editRec;showView('view-form-rec');document.getElementById('fab-wrap').style.display='none';
 }
-
-document.getElementById('frec-photo1').onchange = e => { const f=e.target.files[0]; if(!f) return; rec1File=f; previewPhoto(f,'frec-photo1-preview','rec-upload-placeholder1'); };
-document.getElementById('frec-photo2').onchange = e => { const f=e.target.files[0]; if(!f) return; rec2File=f; previewPhoto(f,'frec-photo2-preview','rec-upload-placeholder2'); };
-
-document.getElementById('frec-save').onclick = async () => {
-  const name=document.getElementById('frec-name').value.trim(); if(!name) return;
+document.getElementById('frec-photo1').onchange=e=>{const f=e.target.files[0];if(!f)return;rec1File=f;prevPhoto(f,'frec-p1-preview','rec-ph1');};
+document.getElementById('frec-photo2').onchange=e=>{const f=e.target.files[0];if(!f)return;rec2File=f;prevPhoto(f,'frec-p2-preview','rec-ph2');};
+document.getElementById('frec-save').onclick=async()=>{
+  const name=document.getElementById('frec-name').value.trim();if(!name)return;
   const id=document.getElementById('frec-id').value||'rec_'+Date.now();
-  const parentId=document.getElementById('frec-parent').value;
-  showToast(T[lang].saving);
-  const existing=allRecipes.find(r=>r.id===id);
-  let img1=existing?.img1||'', img2=existing?.img2||'';
-  if(rec1File){ const r=ref(storage,`recipes/${id}_1_${Date.now()}`); await uploadBytes(r,rec1File); img1=await getDownloadURL(r); }
-  if(rec2File){ const r=ref(storage,`recipes/${id}_2_${Date.now()}`); await uploadBytes(r,rec2File); img2=await getDownloadURL(r); }
-  const data={ parentId, name:{...(existing?.name||{}),[lang]:name}, ingredients:{...(existing?.ingredients||{}),[lang]:document.getElementById('frec-ing').value}, steps:{...(existing?.steps||{}),[lang]:document.getElementById('frec-steps').value}, img1, img2, updatedAt:Date.now() };
-  if(!existing) data.createdAt=Date.now();
-  await setDoc(doc(db,'recipes',id),data,{merge:true});
-  await loadAll(); showToast(T[lang].saved); navTo(parentId);
+  const parentId=document.getElementById('frec-parent').value;showToast(T[lang].saving);
+  const ex=allRecipes.find(r=>r.id===id);let img1=ex?.img1||'',img2=ex?.img2||'';
+  if(rec1File){const r=ref(storage,`recipes/${id}_1_${Date.now()}`);await uploadBytes(r,rec1File);img1=await getDownloadURL(r);}
+  if(rec2File){const r=ref(storage,`recipes/${id}_2_${Date.now()}`);await uploadBytes(r,rec2File);img2=await getDownloadURL(r);}
+  const data={parentId,name:{...(ex?.name||{}),[lang]:name},ingredients:{...(ex?.ingredients||{}),[lang]:document.getElementById('frec-ing').value},steps:{...(ex?.steps||{}),[lang]:document.getElementById('frec-steps').value},img1,img2,updatedAt:Date.now()};
+  if(!ex)data.createdAt=Date.now();
+  await setDoc(doc(db,'recipes',id),data,{merge:true});await loadAll();showToast(T[lang].saved);navTo(parentId);
 };
-document.getElementById('frec-cancel').onclick = () => navTo(currentId);
+document.getElementById('frec-cancel').onclick=()=>navTo(currentId);
+
+// ── PASTE FROM AI ─────────────────────────────────────────────
+document.getElementById('btn-paste').onclick=()=>{document.getElementById('paste-text').value='';document.getElementById('paste-overlay').classList.add('open');};
+document.getElementById('btn-copy-prompt').onclick=()=>{ navigator.clipboard.writeText(PROMPT).then(()=>showToast('Промт скопирован ✓')); };
+document.getElementById('paste-cancel').onclick=()=>document.getElementById('paste-overlay').classList.remove('open');
+document.getElementById('paste-overlay').onclick=e=>{if(e.target===document.getElementById('paste-overlay'))document.getElementById('paste-overlay').classList.remove('open');};
+document.getElementById('paste-go').onclick=()=>{
+  const text=document.getElementById('paste-text').value;if(!text.trim())return;
+  const nameM=text.match(/НАЗВАНИЕ:\s*(.+)/i);if(nameM)document.getElementById('frec-name').value=nameM[1].trim();
+  const srvM=text.match(/ПОРЦИИ:\s*(\d+)/i);
+  const ingM=text.match(/ИНГРЕДИЕНТЫ:([\s\S]*?)(?=ШАГИ:|$)/i);
+  if(ingM){const lines=ingM[1].split('\n').map(l=>l.replace(/^[-•*]\s*/,'').trim()).filter(Boolean);document.getElementById('frec-ing').value=lines.join('\n');}
+  const stepsM=text.match(/ШАГИ:([\s\S]*?)$/i);
+  if(stepsM){const lines=stepsM[1].split('\n').map(l=>l.replace(/^\d+[.)]\s*/,'').trim()).filter(Boolean);document.getElementById('frec-steps').value=lines.join('\n');}
+  document.getElementById('paste-overlay').classList.remove('open');showToast('Рецепт заполнен ✓');
+};
 
 // ── DELETE ────────────────────────────────────────────────────
-function confirmDeleteCat(id) {
+function confirmDelCat(id) {
   const hasChildren=allCats.some(c=>c.parentId===id)||allRecipes.some(r=>r.parentId===id);
-  document.getElementById('modal-title').textContent=T[lang].confirmDeleteCat;
-  document.getElementById('modal-text').textContent=hasChildren?T[lang].warnHasChildren:'';
-  document.getElementById('modal-overlay').classList.add('open');
-  document.getElementById('modal-confirm').onclick=async()=>{ document.getElementById('modal-overlay').classList.remove('open'); await deleteCatRecursive(id); await loadAll(); showToast(T[lang].deleted); renderLevel(); };
+  document.getElementById('del-title').textContent=T[lang].confirmDelCat;
+  document.getElementById('del-text').textContent=hasChildren?T[lang].warnChildren:'';
+  document.getElementById('del-overlay').classList.add('open');
+  document.getElementById('del-confirm').onclick=async()=>{document.getElementById('del-overlay').classList.remove('open');await delCatRec(id);await loadAll();showToast(T[lang].deleted);renderLevel();};
 }
-async function deleteCatRecursive(id) {
-  for(const c of allCats.filter(x=>x.parentId===id)) await deleteCatRecursive(c.id);
-  for(const r of allRecipes.filter(x=>x.parentId===id)) await deleteDoc(doc(db,'recipes',r.id));
-  await deleteDoc(doc(db,'categories',id));
-}
-function confirmDeleteRec(id) {
-  document.getElementById('modal-title').textContent=T[lang].confirmDeleteRec;
-  document.getElementById('modal-text').textContent='';
-  document.getElementById('modal-overlay').classList.add('open');
-  document.getElementById('modal-confirm').onclick=async()=>{ document.getElementById('modal-overlay').classList.remove('open'); await deleteDoc(doc(db,'recipes',id)); await loadAll(); showToast(T[lang].deleted); navTo(currentId); };
-}
-document.getElementById('modal-cancel').onclick=()=>document.getElementById('modal-overlay').classList.remove('open');
-document.getElementById('modal-overlay').onclick=e=>{ if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open'); };
+async function delCatRec(id){for(const c of allCats.filter(x=>x.parentId===id))await delCatRec(c.id);for(const r of allRecipes.filter(x=>x.parentId===id))await deleteDoc(doc(db,'recipes',r.id));await deleteDoc(doc(db,'categories',id));}
+function confirmDelRec(id){document.getElementById('del-title').textContent=T[lang].confirmDelRec;document.getElementById('del-text').textContent='';document.getElementById('del-overlay').classList.add('open');document.getElementById('del-confirm').onclick=async()=>{document.getElementById('del-overlay').classList.remove('open');await deleteDoc(doc(db,'recipes',id));await loadAll();showToast(T[lang].deleted);navTo(currentId);};}
+document.getElementById('del-cancel').onclick=()=>document.getElementById('del-overlay').classList.remove('open');
+document.getElementById('del-overlay').onclick=e=>{if(e.target===document.getElementById('del-overlay'))document.getElementById('del-overlay').classList.remove('open');};
 
 // ── SEARCH ────────────────────────────────────────────────────
-document.getElementById('search-input').oninput = e => {
-  const q=e.target.value.toLowerCase().trim(); if(!q){ renderLevel(); return; }
-  document.getElementById('cats-section').innerHTML=''; document.getElementById('level-title').textContent=T[lang].searchResults;
+document.getElementById('search-input').oninput=e=>{
+  const q=e.target.value.toLowerCase().trim();if(!q){renderLevel();return;}
+  document.getElementById('cats-section').innerHTML='';document.getElementById('level-title').textContent=T[lang].searchResults;
   const results=allRecipes.filter(r=>(r.name?.[lang]||r.name?.ru||'').toLowerCase().includes(q)||(r.ingredients?.[lang]||r.ingredients?.ru||'').toLowerCase().includes(q));
-  const recSec=document.getElementById('recipes-section'); recSec.innerHTML='';
-  if(!results.length){ recSec.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:3rem">🔍</div><div>${T[lang].noResults}</div></div>`; return; }
-  const grid=document.createElement('div'); grid.className='recipe-grid';
-  results.forEach(r=>{ const card=makeRecipeCard(r); const path=getPath(r.parentId); if(path){const p=document.createElement('div');p.className='search-path';p.textContent=path;card.querySelector('.recipe-card-title').appendChild(p);} grid.appendChild(card); });
-  recSec.appendChild(grid); showView('view-browse');
+  const recSec=document.getElementById('recipes-section');recSec.innerHTML='';
+  if(!results.length){recSec.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:3rem">🔍</div><div>${T[lang].noResults}</div></div>`;return;}
+  const grid=document.createElement('div');grid.className='recipe-grid';
+  results.forEach(r=>{const card=makeRecipeCard(r);const path=getPath(r.parentId);if(path){const p=document.createElement('div');p.className='search-path';p.textContent=path;card.querySelector('.recipe-card-title').appendChild(p);}grid.appendChild(card);});
+  recSec.appendChild(grid);showView('view-browse');
 };
-function getPath(pid){ const chain=[]; let c=allCats.find(x=>x.id===pid); while(c){chain.unshift(c.name?.[lang]||c.name?.ru||'');c=allCats.find(x=>x.id===c.parentId);} return chain.join(' › '); }
+function getPath(pid){const ch=[];let c=allCats.find(x=>x.id===pid);while(c){ch.unshift(c.name?.[lang]||c.name?.ru||'');c=allCats.find(x=>x.id===c.parentId);}return ch.join(' › ');}
 
 // ── THEME / LANG ──────────────────────────────────────────────
-document.getElementById('btn-theme').onclick=()=>{ theme=theme==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme',theme); localStorage.setItem('theme',theme); };
-document.getElementById('btn-lang').onclick=()=>{ lang=lang==='ru'?'en':'ru'; localStorage.setItem('lang',lang); document.getElementById('btn-lang').textContent=lang==='ru'?'EN':'RU'; document.getElementById('search-input').placeholder=T[lang].search; renderLevel(); };
+document.getElementById('btn-theme').onclick=()=>{theme=theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',theme);localStorage.setItem('theme',theme);};
+document.getElementById('btn-lang').onclick=()=>{lang=lang==='ru'?'en':'ru';localStorage.setItem('lang',lang);document.getElementById('btn-lang').textContent=lang==='ru'?'EN':'RU';document.getElementById('search-input').placeholder=T[lang].search;renderLevel();};
 
 // ── FAB ───────────────────────────────────────────────────────
 document.getElementById('fab-cat').onclick=openNewCat;
 document.getElementById('fab-rec').onclick=openNewRec;
 
 // ── HELPERS ───────────────────────────────────────────────────
-function showView(id){ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='view-browse'){ document.getElementById('fab-wrap').style.display='flex'; releaseWakeLock(); } }
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
-function previewPhoto(file,prevId,phId){ const rd=new FileReader(); rd.onload=e=>{ const p=document.getElementById(prevId); p.src=e.target.result; p.style.display='block'; document.getElementById(phId).style.display='none'; }; rd.readAsDataURL(file); }
-function resetPhoto(inpId,prevId,phId){ const p=document.getElementById(prevId); p.src=''; p.style.display='none'; document.getElementById(phId).style.display='block'; document.getElementById(inpId).value=''; }
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='view-browse'){document.getElementById('fab-wrap').style.display='flex';relWakeLock();}}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function prevPhoto(file,prevId,phId){const rd=new FileReader();rd.onload=e=>{const p=document.getElementById(prevId);p.src=e.target.result;p.style.display='block';document.getElementById(phId).style.display='none';};rd.readAsDataURL(file);}
+function resetPhoto(inpId,prevId,phId){const p=document.getElementById(prevId);p.src='';p.style.display='none';document.getElementById(phId).style.display='block';document.getElementById(inpId).value='';}
 
-
-// ── WAKE LOCK ─────────────────────────────────────────────────
-let wakeLock = null;
-async function requestWakeLock() {
-  if ('wakeLock' in navigator) {
-    try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
-  }
-}
-function releaseWakeLock() {
-  if (wakeLock) { wakeLock.release(); wakeLock = null; }
-}
-document.addEventListener('visibilitychange', async () => {
-  if (wakeLock && document.visibilityState === 'visible') await requestWakeLock();
-});
-
-// ── SERVINGS ──────────────────────────────────────────────────
-let baseServings = 4;
-let currentServings = 4;
-let baseIngredients = [];
-
-function parseIngredients(text) {
-  return text.split('\n').filter(Boolean).map(line => {
-    const match = line.match(/([\d.,]+)/);
-    return { line, num: match ? parseFloat(match[1].replace(',','.')) : null };
-  });
-}
-
-function renderIngredients(multiplier) {
-  const ingEl = document.getElementById('rd-ing'); ingEl.innerHTML = '';
-  baseIngredients.forEach(item => {
-    const li = document.createElement('li');
-    if (item.num && multiplier !== 1) {
-      const newNum = item.num * multiplier;
-      const rounded = Number.isInteger(newNum) ? newNum : Math.round(newNum * 10) / 10;
-      li.textContent = item.line.replace(/([\d.,]+)/, rounded);
-    } else {
-      li.textContent = item.line;
-    }
-    ingEl.appendChild(li);
-  });
-}
-
-
-// ── PASTE FROM AI ──────────────────────────────────────────────
-const PROMPT_TEXT = `Напиши рецепт строго в этом формате:
-
-НАЗВАНИЕ: [название блюда]
-
-ПОРЦИИ: [число]
-
-ИНГРЕДИЕНТЫ:
-- ингредиент 1 — количество
-- ингредиент 2 — количество
-
-ШАГИ:
-1. Первый шаг
-2. Второй шаг`;
-
-document.getElementById('btn-paste-recipe').onclick = () => {
-  document.getElementById('paste-text').value = '';
-  document.getElementById('paste-modal-overlay').classList.add('open');
-};
-document.getElementById('btn-copy-prompt').onclick = () => {
-  navigator.clipboard.writeText(PROMPT_TEXT).then(() => showToast('Промт скопирован ✓'));
-};
-document.getElementById('paste-cancel').onclick = () => document.getElementById('paste-modal-overlay').classList.remove('open');
-document.getElementById('paste-modal-overlay').onclick = e => { if(e.target===document.getElementById('paste-modal-overlay')) document.getElementById('paste-modal-overlay').classList.remove('open'); };
-
-document.getElementById('paste-parse').onclick = () => {
-  const text = document.getElementById('paste-text').value;
-  if (!text.trim()) return;
-
-  // Parse NAME
-  const nameMatch = text.match(/НАЗВАНИЕ:\s*(.+)/i);
-  if (nameMatch) document.getElementById('frec-name').value = nameMatch[1].trim();
-
-  // Parse SERVINGS
-  const srvMatch = text.match(/ПОРЦИИ:\s*(\d+)/i);
-  if (srvMatch) document.getElementById('frec-name').dataset.servings = srvMatch[1];
-
-  // Parse INGREDIENTS
-  const ingMatch = text.match(/ИНГРЕДИЕНТЫ:([\s\S]*?)(?=ШАГИ:|$)/i);
-  if (ingMatch) {
-    const lines = ingMatch[1].split('
-').map(l => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean);
-    document.getElementById('frec-ing').value = lines.join('
-');
-  }
-
-  // Parse STEPS
-  const stepsMatch = text.match(/ШАГИ:([\s\S]*?)$/i);
-  if (stepsMatch) {
-    const lines = stepsMatch[1].split('
-').map(l => l.replace(/^\d+[.)]\s*/, '').trim()).filter(Boolean);
-    document.getElementById('frec-steps').value = lines.join('
-');
-  }
-
-  document.getElementById('paste-modal-overlay').classList.remove('open');
-  showToast('Рецепт заполнен ✓');
-};
-
-// ── SERVINGS COUNTER ───────────────────────────────────────────
-let baseServings = 4;
-let currentServings = 4;
-let baseIngredients = [];
-
-function parseIngredients(text) {
-  return text.split('
-').filter(Boolean).map(line => {
-    const match = line.match(/([\d.,\/]+)\s*(г|кг|мл|л|ст\.л|ч\.л|cup|ml|g|kg|oz|lb|tbsp|tsp|шт|пучок|зубч|стакан)?/i);
-    return { line, num: match ? parseFloat(match[1].replace(',','.')) : null, unit: match ? match[2]||'' : '' };
-  });
-}
-
-function renderIngredients(multiplier) {
-  const ingEl = document.getElementById('rd-ing'); ingEl.innerHTML = '';
-  baseIngredients.forEach(item => {
-    const li = document.createElement('li');
-    if (item.num && multiplier !== 1) {
-      const newNum = (item.num * multiplier);
-      const rounded = Number.isInteger(newNum) ? newNum : Math.round(newNum * 10) / 10;
-      li.textContent = item.line.replace(/([\d.,\/]+)/, rounded);
-    } else {
-      li.textContent = item.line;
-    }
-    ingEl.appendChild(li);
-  });
-}
-
-document.getElementById('btn-srv-minus').onclick = () => {
-  if (currentServings <= 1) return;
-  currentServings--;
-  document.getElementById('srv-count').textContent = currentServings;
-  renderIngredients(currentServings / baseServings);
-};
-document.getElementById('btn-srv-plus').onclick = () => {
-  currentServings++;
-  document.getElementById('srv-count').textContent = currentServings;
-  renderIngredients(currentServings / baseServings);
-};
-
-// ── WAKE LOCK (экран не гаснет) ────────────────────────────────
-let wakeLock = null;
-async function requestWakeLock() {
-  if ('wakeLock' in navigator) {
-    try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
-  }
-}
-function releaseWakeLock() {
-  if (wakeLock) { wakeLock.release(); wakeLock = null; }
-}
-document.addEventListener('visibilitychange', async () => {
-  if (wakeLock && document.visibilityState === 'visible') await requestWakeLock();
-});
-
-window.openEditCat=openEditCat; window.confirmDeleteCat=confirmDeleteCat;
-window.openEditRec=openEditRec; window.confirmDeleteRec=confirmDeleteRec;
+window.openEditCat=openEditCat;window.confirmDelCat=confirmDelCat;
+window.openEditRec=openEditRec;window.confirmDelRec=confirmDelRec;
 window.navTo=navTo;
 </script>
 </body>
