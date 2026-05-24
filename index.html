@@ -444,7 +444,7 @@ select.form-control { appearance: none; cursor: pointer; }
 </style>
 </head>
 <body>
-<div id="app">
+<div id="app" style="visibility:hidden">
   <header>
     <div class="top-bar">
       <div class="brand">Journal.</div>
@@ -698,12 +698,15 @@ loginScreen.style.display = 'flex';
 
 await setPersistence(auth, browserLocalPersistence);
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   if (user) {
     loginScreen.style.display = 'none';
-    loadAll();
+    document.getElementById('app').style.visibility = 'visible';
+    await loadAll();
+    navTo('root');
   } else {
     loginScreen.style.display = 'flex';
+    document.getElementById('app').style.visibility = 'hidden';
   }
 });
 
