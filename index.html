@@ -630,6 +630,48 @@ function previewPhoto(file,prevId,phId){ const rd=new FileReader(); rd.onload=e=
 function resetPhoto(inpId,prevId,phId){ const p=document.getElementById(prevId); p.src=''; p.style.display='none'; document.getElementById(phId).style.display='block'; document.getElementById(inpId).value=''; }
 
 
+// ── WAKE LOCK ─────────────────────────────────────────────────
+let wakeLock = null;
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+  }
+}
+function releaseWakeLock() {
+  if (wakeLock) { wakeLock.release(); wakeLock = null; }
+}
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock && document.visibilityState === 'visible') await requestWakeLock();
+});
+
+// ── SERVINGS ──────────────────────────────────────────────────
+let baseServings = 4;
+let currentServings = 4;
+let baseIngredients = [];
+
+function parseIngredients(text) {
+  return text.split('\n').filter(Boolean).map(line => {
+    const match = line.match(/([\d.,]+)/);
+    return { line, num: match ? parseFloat(match[1].replace(',','.')) : null };
+  });
+}
+
+function renderIngredients(multiplier) {
+  const ingEl = document.getElementById('rd-ing'); ingEl.innerHTML = '';
+  baseIngredients.forEach(item => {
+    const li = document.createElement('li');
+    if (item.num && multiplier !== 1) {
+      const newNum = item.num * multiplier;
+      const rounded = Number.isInteger(newNum) ? newNum : Math.round(newNum * 10) / 10;
+      li.textContent = item.line.replace(/([\d.,]+)/, rounded);
+    } else {
+      li.textContent = item.line;
+    }
+    ingEl.appendChild(li);
+  });
+}
+
+
 // ── PASTE FROM AI ──────────────────────────────────────────────
 const PROMPT_TEXT = `Напиши рецепт строго в этом формате:
 
