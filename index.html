@@ -25,6 +25,7 @@
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
 }
+#login-screen { background: var(--bg) !important; }
 [data-theme="light"] {
   --bg: #faf8f5;
   --surface: #ffffff;
@@ -444,7 +445,7 @@ select.form-control { appearance: none; cursor: pointer; }
 </style>
 </head>
 <body>
-<div id="app" style="visibility:hidden">
+<div id="app">
   <header>
     <div class="top-bar">
       <div class="brand">Journal.</div>
@@ -589,7 +590,7 @@ select.form-control { appearance: none; cursor: pointer; }
 <div class="toast" id="toast"></div>
 
 <!-- LOGIN SCREEN -->
-<div id="login-screen" style="display:none;position:fixed;inset:0;z-index:999;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;padding:32px;">
+<div id="login-screen" style="display:flex;position:fixed;inset:0;z-index:999;background:#faf8f5;align-items:center;justify-content:center;flex-direction:column;padding:32px;">
   <div style="font-family:var(--font-serif);font-size:2.2rem;font-weight:300;font-style:italic;color:var(--accent);margin-bottom:8px;">Journal.</div>
   <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:40px;letter-spacing:0.08em;">CULINARY JOURNAL</div>
   <div style="width:100%;max-width:320px;">
@@ -694,19 +695,16 @@ async function loadAll() {
 
 // ── AUTH ─────────────────────────────────────────────────────
 const loginScreen = document.getElementById('login-screen');
-loginScreen.style.display = 'flex';
 
 await setPersistence(auth, browserLocalPersistence);
 
 onAuthStateChanged(auth, async user => {
   if (user) {
     loginScreen.style.display = 'none';
-    document.getElementById('app').style.visibility = 'visible';
     await loadAll();
     navTo('root');
   } else {
     loginScreen.style.display = 'flex';
-    document.getElementById('app').style.visibility = 'hidden';
   }
 });
 
