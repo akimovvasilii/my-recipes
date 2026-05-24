@@ -216,6 +216,7 @@ select.form-control{appearance:none;cursor:pointer;}
     <div class="view" id="view-form-rec">
       <div class="form-title" id="form-rec-title">Рецепт</div>
       <input type="hidden" id="frec-id">
+      <input type="hidden" id="frec-servings" value="4">
       <div class="form-group"><label class="form-label">Название</label><input type="text" class="form-control" id="frec-name"></div>
       <div class="form-group"><label class="form-label">Категория</label><select class="form-control" id="frec-parent"></select></div>
       <button class="btn-paste" id="btn-paste">📋 Вставить рецепт от AI</button>
@@ -253,7 +254,7 @@ select.form-control{appearance:none;cursor:pointer;}
   <div class="sheet">
     <div class="sheet-title">📋 Вставить рецепт от AI</div>
     <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px">Используй этот промт для любого AI:</div>
-    <div class="prompt-box">Напиши рецепт строго в этом формате:
+    <div class="prompt-box">Напиши рецепт строго в этом формате. Не добавляй ничего лишнего:
 
 НАЗВАНИЕ: [название блюда]
 ПОРЦИИ: [число]
@@ -264,7 +265,10 @@ select.form-control{appearance:none;cursor:pointer;}
 
 ШАГИ:
 1. Первый шаг
-2. Второй шаг</div>
+2. Второй шаг
+3. Третий шаг
+
+Каждый шаг должен начинаться с номера и точки (1. 2. 3.)</div>
     <button class="btn-copy" id="btn-copy-prompt">📋 Копировать промт</button>
     <div class="form-group"><label class="form-label">Вставь готовый рецепт сюда</label><textarea class="form-control" id="paste-text" rows="8" placeholder="Вставь текст рецепта от AI..."></textarea></div>
     <div class="btn-group"><button class="btn btn-secondary" id="paste-cancel">Отмена</button><button class="btn btn-primary" id="paste-go">Заполнить →</button></div>
@@ -296,7 +300,7 @@ const T = {
   en:{home:"Home",search:"Search recipes...",searchResults:"Results",categories:"Categories",recipes:"Recipes",ingredients:"Ingredients",steps:"Steps",edit:"Edit",delete:"Delete",cancel:"Cancel",save:"Save",newCat:"New category",editCat:"Edit category",newRec:"New recipe",editRec:"Edit recipe",confirmDelCat:"Delete this category?",confirmDelRec:"Delete this recipe?",warnChildren:"Contains subcategories or recipes. All will be deleted.",saving:"Saving...",saved:"Saved ✓",deleted:"Deleted",noRecipes:"No recipes yet",noResults:"Nothing found",servings:"serv."}
 };
 const EMOJIS = ['🥗','🍝','🍲','🥘','🍜','🍛','🍣','🥩','🍗','🥚','🥞','🥖','🍰','🎂','🍪','🧁','🍫','🍷','🍹','🫕','🫔','🌮','🥙','🥪','🧆','🌿','🧄','🫚','🍳','🥣','🫖','☕','📂'];
-const PROMPT = `Напиши рецепт строго в этом формате:\n\nНАЗВАНИЕ: [название блюда]\nПОРЦИИ: [число]\n\nИНГРЕДИЕНТЫ:\n- ингредиент 1 — количество\n- ингредиент 2 — количество\n\nШАГИ:\n1. Первый шаг\n2. Второй шаг`;
+const PROMPT = `Напиши рецепт строго в этом формате. Не добавляй ничего лишнего, только то что указано ниже:\n\nНАЗВАНИЕ: [название блюда]\nПОРЦИИ: [число]\n\nИНГРЕДИЕНТЫ:\n- ингредиент 1 — количество\n- ингредиент 2 — количество\n\nШАГИ:\n1. Первый шаг\n2. Второй шаг\n3. Третий шаг\n\nКаждый шаг должен начинаться с номера и точки (1. 2. 3.)`;
 
 let lang = localStorage.getItem('lang') || 'ru';
 let theme = localStorage.getItem('theme') || 'light';
@@ -461,11 +465,12 @@ function buildParentSel(selId) {
   function add(pid,d){allCats.filter(c=>c.parentId===pid).forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent='\u00a0'.repeat(d*3)+(c.emoji||'📂')+' '+(c.name?.[lang]||c.name?.ru||'');if(c.id===selId)o.selected=true;sel.appendChild(o);add(c.id,d+1);});}
   add('root',0);if(selId)sel.value=selId;
 }
-function openNewRec() { document.getElementById('frec-id').value='';document.getElementById('frec-name').value='';document.getElementById('frec-ing').value='';document.getElementById('frec-steps').value='';buildParentSel(currentId);resetPhoto('frec-photo1','frec-p1-preview','rec-ph1');resetPhoto('frec-photo2','frec-p2-preview','rec-ph2');rec1File=null;rec2File=null;document.getElementById('form-rec-title').textContent=T[lang].newRec;showView('view-form-rec');document.getElementById('fab-wrap').style.display='none'; }
+function openNewRec() { document.getElementById('frec-id').value='';document.getElementById('frec-name').value='';document.getElementById('frec-ing').value='';document.getElementById('frec-steps').value='';buildParentSel(currentId);resetPhoto('frec-photo1','frec-p1-preview','rec-ph1');resetPhoto('frec-photo2','frec-p2-preview','rec-ph2');rec1File=null;rec2File=null;document.getElementById('frec-servings').value=4;document.getElementById('form-rec-title').textContent=T[lang].newRec;showView('view-form-rec');document.getElementById('fab-wrap').style.display='none'; }
 function openEditRec(id) {
   const r=allRecipes.find(x=>x.id===id);if(!r)return;
   document.getElementById('frec-id').value=id;document.getElementById('frec-name').value=r.name?.[lang]||r.name?.ru||'';
   document.getElementById('frec-ing').value=r.ingredients?.[lang]||r.ingredients?.ru||'';
+  document.getElementById('frec-servings').value=r.servings||4;
   document.getElementById('frec-steps').value=r.steps?.[lang]||r.steps?.ru||'';
   buildParentSel(r.parentId);
   if(r.img1){document.getElementById('frec-p1-preview').src=r.img1;document.getElementById('frec-p1-preview').style.display='block';document.getElementById('rec-ph1').style.display='none';}else resetPhoto('frec-photo1','frec-p1-preview','rec-ph1');
@@ -481,7 +486,8 @@ document.getElementById('frec-save').onclick=async()=>{
   const ex=allRecipes.find(r=>r.id===id);let img1=ex?.img1||'',img2=ex?.img2||'';
   if(rec1File){const r=ref(storage,`recipes/${id}_1_${Date.now()}`);await uploadBytes(r,rec1File);img1=await getDownloadURL(r);}
   if(rec2File){const r=ref(storage,`recipes/${id}_2_${Date.now()}`);await uploadBytes(r,rec2File);img2=await getDownloadURL(r);}
-  const data={parentId,name:{...(ex?.name||{}),[lang]:name},ingredients:{...(ex?.ingredients||{}),[lang]:document.getElementById('frec-ing').value},steps:{...(ex?.steps||{}),[lang]:document.getElementById('frec-steps').value},img1,img2,updatedAt:Date.now()};
+  const servings=parseInt(document.getElementById('frec-servings').value)||4;
+const data={parentId,name:{...(ex?.name||{}),[lang]:name},ingredients:{...(ex?.ingredients||{}),[lang]:document.getElementById('frec-ing').value},steps:{...(ex?.steps||{}),[lang]:document.getElementById('frec-steps').value},img1,img2,servings,updatedAt:Date.now()};
   if(!ex)data.createdAt=Date.now();
   await setDoc(doc(db,'recipes',id),data,{merge:true});await loadAll();showToast(T[lang].saved);navTo(parentId);
 };
@@ -495,7 +501,7 @@ document.getElementById('paste-overlay').onclick=e=>{if(e.target===document.getE
 document.getElementById('paste-go').onclick=()=>{
   const text=document.getElementById('paste-text').value;if(!text.trim())return;
   const nameM=text.match(/НАЗВАНИЕ:\s*(.+)/i);if(nameM)document.getElementById('frec-name').value=nameM[1].trim();
-  const srvM=text.match(/ПОРЦИИ:\s*(\d+)/i);
+  const srvM=text.match(/ПОРЦИИ:\s*(\d+)/i);if(srvM)document.getElementById('frec-servings').value=srvM[1];
   const ingM=text.match(/ИНГРЕДИЕНТЫ:([\s\S]*?)(?=ШАГИ:|$)/i);
   if(ingM){const lines=ingM[1].split('\n').map(l=>l.replace(/^[-•*]\s*/,'').trim()).filter(Boolean);document.getElementById('frec-ing').value=lines.join('\n');}
   const stepsM=text.match(/ШАГИ:([\s\S]*?)$/i);
