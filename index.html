@@ -154,6 +154,21 @@ select.form-control { appearance: none; cursor: pointer; }
 .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 30px; font-size: 0.85rem; z-index: 300; opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .search-path { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+/* PASTE MODAL */
+.paste-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+.paste-modal-overlay.open { display: flex; }
+.paste-modal { background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 20px; width: 100%; max-width: 480px; border-top: 1px solid var(--border); animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
+.prompt-box { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; font-family: var(--font-sans); white-space: pre-wrap; }
+.btn-copy-prompt { background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 20px; padding: 6px 14px; font-size: 0.82rem; cursor: pointer; margin-bottom: 16px; }
+.btn-copy-prompt:active { background: var(--accent); color: #0f0e0d; }
+.servings-row { display: flex; align-items: center; gap: 12px; margin: 16px 0 8px; }
+.servings-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 500; flex: 1; }
+.servings-ctrl { display: flex; align-items: center; gap: 10px; }
+.servings-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color var(--transition); }
+.servings-btn:hover { border-color: var(--accent); }
+.servings-count { font-family: var(--font-serif); font-size: 1.3rem; min-width: 28px; text-align: center; }
+
 .login-error { color: #c0392b; font-size: 0.85rem; margin-bottom: 12px; display: none; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -206,7 +221,7 @@ select.form-control { appearance: none; cursor: pointer; }
     <div class="view" id="view-recipe">
       <div class="recipe-hero-wrap" id="rd-hero"></div>
       <div class="recipe-title" id="rd-title"></div>
-      <div class="recipe-section-title" id="rd-lbl-ing">Ингредиенты</div>
+      <div class="servings-row"><span class="servings-label" id="rd-lbl-ing">Ингредиенты</span><div class="servings-ctrl"><button class="servings-btn" id="btn-srv-minus">−</button><span class="servings-count" id="srv-count">4</span><button class="servings-btn" id="btn-srv-plus">+</button></div></div>
       <ul class="ing-list" id="rd-ing"></ul>
       <div class="recipe-section-title" id="rd-lbl-steps">Шаги</div>
       <ol class="steps-list" id="rd-steps"></ol>
@@ -241,7 +256,7 @@ select.form-control { appearance: none; cursor: pointer; }
       <input type="hidden" id="frec-id">
       <div class="form-group"><label class="form-label">Название</label><input type="text" class="form-control" id="frec-name"></div>
       <div class="form-group"><label class="form-label">Категория</label><select class="form-control" id="frec-parent"></select></div>
-      <div class="form-group"><label class="form-label">Ингредиенты</label><textarea class="form-control" id="frec-ing" rows="5" placeholder="Каждый ингредиент с новой строки"></textarea></div>
+      <div class="form-group"><button class="btn btn-secondary" id="btn-paste-recipe" style="width:100%;margin-bottom:16px">📋 Вставить рецепт от AI</button></div><div class="form-group"><label class="form-label">Ингредиенты</label><textarea class="form-control" id="frec-ing" rows="5" placeholder="Каждый ингредиент с новой строки"></textarea></div>
       <div class="form-group"><label class="form-label">Шаги</label><textarea class="form-control" id="frec-steps" rows="6" placeholder="Каждый шаг с новой строки"></textarea></div>
       <div class="form-group">
         <label class="form-label">Главное фото</label>
@@ -285,6 +300,36 @@ select.form-control { appearance: none; cursor: pointer; }
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- PASTE MODAL -->
+<div class="paste-modal-overlay" id="paste-modal-overlay">
+  <div class="paste-modal">
+    <div class="modal-title" style="margin-bottom:12px">📋 Вставить рецепт от AI</div>
+    <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px">Используй этот промт для любого AI:</div>
+    <div class="prompt-box" id="prompt-box">Напиши рецепт строго в этом формате:
+
+НАЗВАНИЕ: [название блюда]
+
+ПОРЦИИ: [число]
+
+ИНГРЕДИЕНТЫ:
+- ингредиент 1 — количество
+- ингредиент 2 — количество
+
+ШАГИ:
+1. Первый шаг
+2. Второй шаг</div>
+    <button class="btn-copy-prompt" id="btn-copy-prompt">📋 Копировать промт</button>
+    <div class="form-group">
+      <label class="form-label">Вставь готовый рецепт сюда</label>
+      <textarea class="form-control" id="paste-text" rows="8" placeholder="Вставь текст рецепта от AI..."></textarea>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-secondary" id="paste-cancel">Отмена</button>
+      <button class="btn btn-primary" id="paste-parse">Заполнить →</button>
+    </div>
+  </div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -431,10 +476,13 @@ function openRecipe(id) {
   const r = allRecipes.find(x=>x.id===id); if(!r) return;
   document.getElementById('rd-hero').innerHTML = r.img1 ? `<img src="${r.img1}" alt="">` : `<div class="recipe-hero-placeholder">🍽</div>`;
   document.getElementById('rd-title').textContent = r.name?.[lang]||r.name?.ru||'';
-  document.getElementById('rd-lbl-ing').textContent = T[lang].ingredients;
   document.getElementById('rd-lbl-steps').textContent = T[lang].steps;
-  const ingEl = document.getElementById('rd-ing'); ingEl.innerHTML = '';
-  (r.ingredients?.[lang]||r.ingredients?.ru||'').split('\n').filter(Boolean).forEach(line=>{ const li=document.createElement('li'); li.textContent=line; ingEl.appendChild(li); });
+  // Setup servings
+  baseServings = r.servings || 4; currentServings = baseServings;
+  document.getElementById('srv-count').textContent = currentServings;
+  baseIngredients = parseIngredients(r.ingredients?.[lang]||r.ingredients?.ru||'');
+  renderIngredients(1);
+  requestWakeLock();
   const stepsEl = document.getElementById('rd-steps'); stepsEl.innerHTML = '';
   (r.steps?.[lang]||r.steps?.ru||'').split('\n').filter(Boolean).forEach(line=>{ const li=document.createElement('li'); li.textContent=line; stepsEl.appendChild(li); });
   const footer = document.getElementById('rd-footer-img');
@@ -576,10 +624,124 @@ document.getElementById('fab-cat').onclick=openNewCat;
 document.getElementById('fab-rec').onclick=openNewRec;
 
 // ── HELPERS ───────────────────────────────────────────────────
-function showView(id){ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='view-browse') document.getElementById('fab-wrap').style.display='flex'; }
+function showView(id){ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='view-browse'){ document.getElementById('fab-wrap').style.display='flex'; releaseWakeLock(); } }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
 function previewPhoto(file,prevId,phId){ const rd=new FileReader(); rd.onload=e=>{ const p=document.getElementById(prevId); p.src=e.target.result; p.style.display='block'; document.getElementById(phId).style.display='none'; }; rd.readAsDataURL(file); }
 function resetPhoto(inpId,prevId,phId){ const p=document.getElementById(prevId); p.src=''; p.style.display='none'; document.getElementById(phId).style.display='block'; document.getElementById(inpId).value=''; }
+
+
+// ── PASTE FROM AI ──────────────────────────────────────────────
+const PROMPT_TEXT = `Напиши рецепт строго в этом формате:
+
+НАЗВАНИЕ: [название блюда]
+
+ПОРЦИИ: [число]
+
+ИНГРЕДИЕНТЫ:
+- ингредиент 1 — количество
+- ингредиент 2 — количество
+
+ШАГИ:
+1. Первый шаг
+2. Второй шаг`;
+
+document.getElementById('btn-paste-recipe').onclick = () => {
+  document.getElementById('paste-text').value = '';
+  document.getElementById('paste-modal-overlay').classList.add('open');
+};
+document.getElementById('btn-copy-prompt').onclick = () => {
+  navigator.clipboard.writeText(PROMPT_TEXT).then(() => showToast('Промт скопирован ✓'));
+};
+document.getElementById('paste-cancel').onclick = () => document.getElementById('paste-modal-overlay').classList.remove('open');
+document.getElementById('paste-modal-overlay').onclick = e => { if(e.target===document.getElementById('paste-modal-overlay')) document.getElementById('paste-modal-overlay').classList.remove('open'); };
+
+document.getElementById('paste-parse').onclick = () => {
+  const text = document.getElementById('paste-text').value;
+  if (!text.trim()) return;
+
+  // Parse NAME
+  const nameMatch = text.match(/НАЗВАНИЕ:\s*(.+)/i);
+  if (nameMatch) document.getElementById('frec-name').value = nameMatch[1].trim();
+
+  // Parse SERVINGS
+  const srvMatch = text.match(/ПОРЦИИ:\s*(\d+)/i);
+  if (srvMatch) document.getElementById('frec-name').dataset.servings = srvMatch[1];
+
+  // Parse INGREDIENTS
+  const ingMatch = text.match(/ИНГРЕДИЕНТЫ:([\s\S]*?)(?=ШАГИ:|$)/i);
+  if (ingMatch) {
+    const lines = ingMatch[1].split('
+').map(l => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean);
+    document.getElementById('frec-ing').value = lines.join('
+');
+  }
+
+  // Parse STEPS
+  const stepsMatch = text.match(/ШАГИ:([\s\S]*?)$/i);
+  if (stepsMatch) {
+    const lines = stepsMatch[1].split('
+').map(l => l.replace(/^\d+[.)]\s*/, '').trim()).filter(Boolean);
+    document.getElementById('frec-steps').value = lines.join('
+');
+  }
+
+  document.getElementById('paste-modal-overlay').classList.remove('open');
+  showToast('Рецепт заполнен ✓');
+};
+
+// ── SERVINGS COUNTER ───────────────────────────────────────────
+let baseServings = 4;
+let currentServings = 4;
+let baseIngredients = [];
+
+function parseIngredients(text) {
+  return text.split('
+').filter(Boolean).map(line => {
+    const match = line.match(/([\d.,\/]+)\s*(г|кг|мл|л|ст\.л|ч\.л|cup|ml|g|kg|oz|lb|tbsp|tsp|шт|пучок|зубч|стакан)?/i);
+    return { line, num: match ? parseFloat(match[1].replace(',','.')) : null, unit: match ? match[2]||'' : '' };
+  });
+}
+
+function renderIngredients(multiplier) {
+  const ingEl = document.getElementById('rd-ing'); ingEl.innerHTML = '';
+  baseIngredients.forEach(item => {
+    const li = document.createElement('li');
+    if (item.num && multiplier !== 1) {
+      const newNum = (item.num * multiplier);
+      const rounded = Number.isInteger(newNum) ? newNum : Math.round(newNum * 10) / 10;
+      li.textContent = item.line.replace(/([\d.,\/]+)/, rounded);
+    } else {
+      li.textContent = item.line;
+    }
+    ingEl.appendChild(li);
+  });
+}
+
+document.getElementById('btn-srv-minus').onclick = () => {
+  if (currentServings <= 1) return;
+  currentServings--;
+  document.getElementById('srv-count').textContent = currentServings;
+  renderIngredients(currentServings / baseServings);
+};
+document.getElementById('btn-srv-plus').onclick = () => {
+  currentServings++;
+  document.getElementById('srv-count').textContent = currentServings;
+  renderIngredients(currentServings / baseServings);
+};
+
+// ── WAKE LOCK (экран не гаснет) ────────────────────────────────
+let wakeLock = null;
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+  }
+}
+function releaseWakeLock() {
+  if (wakeLock) { wakeLock.release(); wakeLock = null; }
+}
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock && document.visibilityState === 'visible') await requestWakeLock();
+});
 
 window.openEditCat=openEditCat; window.confirmDeleteCat=confirmDeleteCat;
 window.openEditRec=openEditRec; window.confirmDeleteRec=confirmDeleteRec;
