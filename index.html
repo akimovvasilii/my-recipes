@@ -270,21 +270,14 @@ header {
 }
 .ing-list { list-style: none; }
 .ing-list li {
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-  font-size: 0.93rem; display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 0 8px 12px; border-bottom: 1px solid var(--border);
+  font-size: 0.93rem;
 }
-.ing-list li::before { content: "—"; color: var(--accent); flex-shrink: 0; }
-.steps-list { list-style: none; counter-reset: steps; }
+.steps-list { list-style: none; }
 .steps-list li {
-  counter-increment: steps; padding: 10px 0 10px 36px;
+  padding: 10px 0 10px 12px;
   border-bottom: 1px solid var(--border);
-  font-size: 0.93rem; line-height: 1.6; position: relative;
-}
-.steps-list li::before {
-  content: counter(steps);
-  position: absolute; left: 0; top: 10px;
-  font-family: var(--font-serif); font-size: 1.2rem;
-  color: var(--accent); font-weight: 300; width: 24px;
+  font-size: 0.93rem; line-height: 1.6;
 }
 .recipe-footer-img {
   margin-top: 20px; border-radius: var(--radius);
@@ -575,7 +568,7 @@ select.form-control { appearance: none; cursor: pointer; }
       <button class="fab fab-secondary" id="fab-cat" title="Добавить категорию">📂</button>
     </div>
     <div style="position:relative">
-      <button class="fab fab-primary" id="fab-rec" title="Добавить рецепт">🍳</button>
+      <button class="fab fab-primary" id="fab-rec" title="Добавить рецепт">🍽</button>
     </div>
   </div>
 </div>
@@ -595,11 +588,30 @@ select.form-control { appearance: none; cursor: pointer; }
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="display:none;position:fixed;inset:0;z-index:999;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;padding:32px;">
+  <div style="font-family:var(--font-serif);font-size:2.2rem;font-weight:300;font-style:italic;color:var(--accent);margin-bottom:8px;">Journal.</div>
+  <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:40px;letter-spacing:0.08em;">CULINARY JOURNAL</div>
+  <div style="width:100%;max-width:320px;">
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" id="login-email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Пароль / Password</label>
+      <input type="password" class="form-control" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div id="login-error" style="color:#c0392b;font-size:0.85rem;margin-bottom:12px;display:none;"></div>
+    <button class="btn btn-primary" id="login-btn" style="width:100%;margin-top:8px;">Войти / Sign in</button>
+  </div>
+</div>
+
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // ── FIREBASE CONFIG ──────────────────────────────────────────
 const firebaseConfig = {
@@ -614,6 +626,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 const storage = getStorage(app);
+const auth = getAuth(app);
 
 // ── I18N ─────────────────────────────────────────────────────
 const T = {
@@ -679,7 +692,37 @@ async function loadAll() {
   renderLevel();
 }
 
-loadAll();
+// ── AUTH ─────────────────────────────────────────────────────
+const loginScreen = document.getElementById('login-screen');
+loginScreen.style.display = 'flex';
+
+await setPersistence(auth, browserLocalPersistence);
+
+onAuthStateChanged(auth, user => {
+  if (user) {
+    loginScreen.style.display = 'none';
+    loadAll();
+  } else {
+    loginScreen.style.display = 'flex';
+  }
+});
+
+document.getElementById('login-btn').onclick = async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    errEl.textContent = 'Неверный email или пароль';
+    errEl.style.display = 'block';
+  }
+};
+
+document.getElementById('login-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('login-btn').click();
+});
 
 // ── RENDER LEVEL ─────────────────────────────────────────────
 function renderLevel() {
