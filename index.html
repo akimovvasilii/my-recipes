@@ -254,7 +254,7 @@ select.form-control{appearance:none;cursor:pointer;}
   <div class="sheet">
     <div class="sheet-title">📋 Вставить рецепт от AI</div>
     <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px">Используй этот промт для любого AI:</div>
-    <div class="prompt-box">Напиши рецепт строго в этом формате, в виде текста, готового для копирования, и создай .txt-файл. Не добавляй ничего лишнего, только то что указано ниже:
+    <div class="prompt-box">Напиши рецепт строго в этом формате. Не добавляй ничего лишнего:
 
 НАЗВАНИЕ: [название блюда]
 ПОРЦИИ: [число]
@@ -503,9 +503,9 @@ document.getElementById('paste-go').onclick=()=>{
   const nameM=text.match(/НАЗВАНИЕ:\s*(.+)/i);if(nameM)document.getElementById('frec-name').value=nameM[1].trim();
   const srvM=text.match(/ПОРЦИИ:\s*(\d+)/i);if(srvM)document.getElementById('frec-servings').value=srvM[1];
   const ingM=text.match(/ИНГРЕДИЕНТЫ:([\s\S]*?)(?=ШАГИ:|$)/i);
-  if(ingM){const lines=ingM[1].split('\n').map(l=>l.replace(/^[-•*]\s*/,'').trim()).filter(Boolean);document.getElementById('frec-ing').value=lines.join('\n');}
+  if(ingM){const lines=ingM[1].split('\n').map(l=>l.trim()).filter(Boolean);document.getElementById('frec-ing').value=lines.join('\n');}
   const stepsM=text.match(/ШАГИ:([\s\S]*?)$/i);
-  if(stepsM){const lines=stepsM[1].split('\n').map(l=>l.replace(/^\d+[.)]\s*/,'').trim()).filter(Boolean);document.getElementById('frec-steps').value=lines.join('\n');}
+  if(stepsM){const lines=stepsM[1].split('\n').map(l=>l.trim()).filter(Boolean);document.getElementById('frec-steps').value=lines.join('\n');}
   document.getElementById('paste-overlay').classList.remove('open');showToast('Рецепт заполнен ✓');
 };
 
