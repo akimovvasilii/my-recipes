@@ -300,7 +300,7 @@ const T = {
   en:{home:"Home",search:"Search recipes...",searchResults:"Results",categories:"Categories",recipes:"Recipes",ingredients:"Ingredients",steps:"Steps",edit:"Edit",delete:"Delete",cancel:"Cancel",save:"Save",newCat:"New category",editCat:"Edit category",newRec:"New recipe",editRec:"Edit recipe",confirmDelCat:"Delete this category?",confirmDelRec:"Delete this recipe?",warnChildren:"Contains subcategories or recipes. All will be deleted.",saving:"Saving...",saved:"Saved ✓",deleted:"Deleted",noRecipes:"No recipes yet",noResults:"Nothing found",servings:"serv."}
 };
 const EMOJIS = ['🥗','🍝','🍲','🥘','🍜','🍛','🍣','🥩','🍗','🥚','🥞','🥖','🍰','🎂','🍪','🧁','🍫','🍷','🍹','🫕','🫔','🌮','🥙','🥪','🧆','🌿','🧄','🫚','🍳','🥣','🫖','☕','📂'];
-const PROMPT = `Напиши рецепт строго в этом формате. Не добавляй ничего лишнего, только то что указано ниже:\n\nНАЗВАНИЕ: [название блюда]\nПОРЦИИ: [число]\n\nИНГРЕДИЕНТЫ:\n- ингредиент 1 — количество\n- ингредиент 2 — количество\n\nШАГИ:\n1. Первый шаг\n2. Второй шаг\n3. Третий шаг\n\nКаждый шаг должен начинаться с номера и точки (1. 2. 3.)`;
+const PROMPT = `Напиши рецепт строго в этом формате, создай txt файл. Не добавляй ничего лишнего:\n\nНАЗВАНИЕ: [название блюда]\nПОРЦИИ: [число]\n\nИНГРЕДИЕНТЫ:\n- ингредиент 1 — количество\n- ингредиент 2 — количество\n\nШАГИ:\n1. Первый шаг\n2. Второй шаг\n3. Третий шаг\n\nКаждый шаг должен начинаться с номера и точки (1. 2. 3.)`;
 
 let lang = localStorage.getItem('lang') || 'ru';
 let theme = localStorage.getItem('theme') || 'light';
